@@ -1,0 +1,4 @@
+{
+  "preset": "Chiiya\\LaravelCodeStyle\\TLintPreset",
+  "excluded": ["_ide_helper.php", ".ddev/"]
+}

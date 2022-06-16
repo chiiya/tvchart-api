@@ -1,0 +1,13 @@
+{
+  "name": "Application",
+  "alias": "application",
+  "description": "",
+  "keywords": [],
+  "order": 0,
+  "providers": [
+    "App\\Application\\Providers\\ApplicationServiceProvider"
+  ],
+  "aliases": {},
+  "files": [],
+  "requires": []
+}

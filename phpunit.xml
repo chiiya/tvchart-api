@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+  <testsuites>
+    <testsuite name="Unit">
+      <directory suffix="Test.php">./app/**/Tests/Unit/</directory>
+    </testsuite>
+    <testsuite name="Feature">
+      <directory suffix="Test.php">./app/**/Tests/Feature/</directory>
+    </testsuite>
+  </testsuites>
+
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./app</directory>
+    </include>
+    <exclude>
+      <directory suffix="blade.php">./app</directory>
+      <directory suffix=".php">./app/**/Routes</directory>
+      <directory suffix=".php">./app/**/Resources</directory>
+      <directory suffix=".php">./app/**/Tests</directory>
+      <directory suffix=".php">./app/**/Config</directory>
+      <directory suffix=".php">./app/**/Database</directory>
+      <directory suffix=".php">./app/**/Policies</directory>
+    </exclude>
+  </coverage>
+  <php>
+    <env name="APP_ENV" value="testing"/>
+    <env name="BCRYPT_ROUNDS" value="4"/>
+    <env name="CACHE_DRIVER" value="array"/>
+    <env name="DB_CONNECTION" value="sqlite"/>
+    <env name="DB_DATABASE" value=":memory:"/>
+    <env name="MAIL_MAILER" value="array"/>
+    <env name="QUEUE_CONNECTION" value="sync"/>
+    <env name="SESSION_DRIVER" value="array"/>
+    <env name="TELESCOPE_ENABLED" value="false"/>
+  </php>
+</phpunit>
