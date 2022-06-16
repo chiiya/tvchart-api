@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Str;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Cache Store
@@ -32,7 +31,6 @@ return [
     */
 
     'stores' => [
-
         'apc' => [
             'driver' => 'apc',
         ],
@@ -57,10 +55,7 @@ return [
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
-            'sasl' => [
-                env('MEMCACHED_USERNAME'),
-                env('MEMCACHED_PASSWORD'),
-            ],
+            'sasl' => [env('MEMCACHED_USERNAME'), env('MEMCACHED_PASSWORD')],
             'options' => [
                 // Memcached::OPT_CONNECT_TIMEOUT => 2000,
             ],
@@ -91,7 +86,6 @@ return [
         'octane' => [
             'driver' => 'octane',
         ],
-
     ],
 
     /*
@@ -106,5 +100,4 @@ return [
     */
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
-
 ];

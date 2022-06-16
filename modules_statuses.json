@@ -1,3 +1,5 @@
 {
-    "Application": true
+    "Application": true,
+    "Domain": true,
+    "V1": true
 }

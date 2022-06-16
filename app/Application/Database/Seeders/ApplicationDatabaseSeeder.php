@@ -20,9 +20,7 @@ class ApplicationDatabaseSeeder extends Seeder
             'email' => 'github@chiiya.moe',
         ],
     ];
-    public static array $permissions = [
-        'shows.view',
-    ];
+    public static array $permissions = ['shows.view'];
 
     /**
      * Run the database seeds.

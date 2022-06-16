@@ -1,12 +1,10 @@
 <?php declare(strict_types=1);
-
 use Chiiya\FilamentAccessControl\Http\Livewire\Login;
 use Filament\AvatarProviders\UiAvatarsProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Http\Middleware\MirrorConfigToSubpackages;
 use Filament\Pages\Dashboard;
-use Filament\Tables\Actions\LinkAction;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -29,7 +27,6 @@ return [
 
     'path' => env('FILAMENT_PATH', 'admin'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Filament Core Path
@@ -41,7 +38,6 @@ return [
     */
 
     'core_path' => env('FILAMENT_CORE_PATH', 'filament'),
-
 
     /*
     |--------------------------------------------------------------------------
@@ -226,7 +222,7 @@ return [
     |
     */
 
-    'default_avatar_provider' => \Filament\AvatarProviders\UiAvatarsProvider::class,
+    'default_avatar_provider' => UiAvatarsProvider::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -266,9 +262,7 @@ return [
     */
 
     'middleware' => [
-        'auth' => [
-            Authenticate::class,
-        ],
+        'auth' => [Authenticate::class],
         'base' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,

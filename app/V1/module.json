@@ -1,0 +1,13 @@
+{
+    "name": "V1",
+    "alias": "v1",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "App\\V1\\Providers\\V1ServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

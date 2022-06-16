@@ -1,0 +1,23 @@
+{
+    "name": "chiiya/domain",
+    "description": "",
+    "authors": [
+        {
+            "name": "Elisha Witte",
+            "email": "github@chiiya.moe"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Domain\\": ""
+        }
+    }
+}

@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Str;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Session Driver
@@ -126,10 +125,7 @@ return [
     |
     */
 
-    'cookie' => env(
-        'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
-    ),
+    'cookie' => env('SESSION_COOKIE', Str::slug(env('APP_NAME', 'laravel'), '_').'_session'),
 
     /*
     |--------------------------------------------------------------------------
@@ -197,5 +193,4 @@ return [
     */
 
     'same_site' => 'lax',
-
 ];
