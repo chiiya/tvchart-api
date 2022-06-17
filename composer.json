@@ -16,7 +16,8 @@
     "nwidart/laravel-modules": "^9.0",
     "sentry/sentry-laravel": "^2.12",
     "spatie/data-transfer-object": "^3.8",
-    "spatie/laravel-query-builder": "^5.0"
+    "spatie/laravel-query-builder": "^5.0",
+    "symfony/yaml": "^6.1"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.12",
