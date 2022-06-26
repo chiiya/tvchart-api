@@ -9,8 +9,8 @@ return new class() extends Migration {
     {
         Schema::create('tv_shows', function (Blueprint $table): void {
             $table->unsignedBigInteger('tmdb_id')->primary();
-            $table->string('name');
-            $table->boolean('adult');
+            $table->string('original_name');
+            $table->string('name')->nullable();
             $table->integer('runtime')->nullable();
             $table->string('backdrop')->nullable();
             $table->string('poster')->nullable();
@@ -25,7 +25,9 @@ return new class() extends Migration {
             $table->string('content_rating')->nullable();
             $table->decimal('imdb_score', 9, 2)->default(0);
             $table->bigInteger('imdb_votes')->unsigned()->default(0);
-            $table->string('imdb_id', 9)->nullable()->index();
+            $table->bigInteger('trakt_members')->default(0);
+            $table->float('popularity')->nullable();
+            $table->string('imdb_id')->nullable()->index();
             $table->bigInteger('tvdb_id')->unsigned()->nullable()->index();
             $table->json('locked_fields')->nullable();
             $table->timestamps();

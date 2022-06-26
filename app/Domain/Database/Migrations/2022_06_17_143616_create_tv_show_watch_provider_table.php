@@ -15,7 +15,7 @@ return new class() extends Migration {
 
             $table->foreign('tv_show_id')->references('tmdb_id')->on('tv_shows')->cascadeOnDelete();
             $table->foreign('watch_provider_id')->references('tmdb_id')->on('watch_providers')->cascadeOnDelete();
-            $table->foreign('region')->references('country')->on('watch_provider_regions')->cascadeOnDelete();
+            $table->foreign('region')->references('country_code')->on('countries')->cascadeOnDelete();
         });
     }
 

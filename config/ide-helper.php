@@ -112,7 +112,7 @@ return [
     |
     */
 
-    'model_locations' => ['app/Application/Models'],
+    'model_locations' => ['app/Application/Models', 'app/Domain/Models'],
 
     /*
     |--------------------------------------------------------------------------

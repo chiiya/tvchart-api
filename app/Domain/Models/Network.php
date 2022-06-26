@@ -2,8 +2,25 @@
 
 namespace App\Domain\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Domain\Models\Network.
+ *
+ * @property int $tmdb_id
+ * @property string $name
+ * @property string|null $logo
+ * @property string|null $country
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @method static Builder|Network newModelQuery()
+ * @method static Builder|Network newQuery()
+ * @method static Builder|Network query()
+ * @mixin \Eloquent
+ */
 class Network extends Model
 {
     /** {@inheritDoc} */

@@ -2,8 +2,25 @@
 
 namespace App\Domain\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Domain\Models\WatchProvider.
+ *
+ * @property int $tmdb_id
+ * @property string $name
+ * @property string $logo
+ * @property int $priority
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @method static Builder|WatchProvider newModelQuery()
+ * @method static Builder|WatchProvider newQuery()
+ * @method static Builder|WatchProvider query()
+ * @mixin \Eloquent
+ */
 class WatchProvider extends Model
 {
     /** {@inheritDoc} */

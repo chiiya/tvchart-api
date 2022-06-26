@@ -18,3 +18,4 @@ timezone: Europe/Berlin
 composer_version: "2"
 web_environment: []
 nodejs_version: "16"
+host_db_port: 59002

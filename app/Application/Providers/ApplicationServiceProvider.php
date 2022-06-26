@@ -29,6 +29,7 @@ class ApplicationServiceProvider extends ServiceProvider
             $this->app->register(IdeHelperServiceProvider::class);
             $this->app->register(LaravelTelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
+            $this->app->register(HorizonServiceProvider::class);
         }
     }
 }

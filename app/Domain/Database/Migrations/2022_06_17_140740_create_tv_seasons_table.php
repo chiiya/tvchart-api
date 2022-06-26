@@ -12,10 +12,11 @@ return new class() extends Migration {
             $table->unsignedBigInteger('tv_show_id');
             $table->integer('number');
             $table->string('name')->nullable();
-            $table->text('summary')->nullable();
+            $table->text('overview')->nullable();
             $table->string('poster')->nullable();
             $table->date('first_air_date')->nullable()->index();
             $table->integer('release_year')->nullable()->index();
+            $table->decimal('trakt_score', 9, 2)->default(0);
             $table->bigInteger('tvdb_id')->unsigned()->nullable()->index();
             $table->json('locked_fields')->nullable();
             $table->timestamps();

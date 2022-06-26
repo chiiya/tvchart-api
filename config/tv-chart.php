@@ -48,7 +48,7 @@ return [
             'Drama' => 'Drama',
             'Family' => 'Family',
             'Fantasy' => 'Fantasy',
-            'Food' => 'Food',
+            //            'Food' => 'Food',
             'Game Show' => 'Game Show',
             'History' => 'History',
             'Horror' => 'Horror',
@@ -60,7 +60,55 @@ return [
             'Soap' => 'Soap',
             'Sport' => 'Sport',
             'Talk Show' => 'Talk Show',
-            'Travel' => 'Travel',
+            //            'Travel' => 'Travel',
         ],
+        'omdb' => [
+            'Action' => 'Action',
+            'Adventure' => 'Adventure',
+            'Animation' => 'Animation',
+            'Comedy' => 'Comedy',
+            'Crime' => 'Crime',
+            'Documentary' => 'Documentary',
+            'Drama' => 'Drama',
+            'Family' => 'Family',
+            'Fantasy' => 'Fantasy',
+            'Game Show' => 'Game Show',
+            'History' => 'History',
+            'Horror' => 'Horror',
+            'Mystery' => 'Mystery',
+            'News' => 'News',
+            'Reality-TV' => 'Reality',
+            'Romance' => 'Romance',
+            'Sci-Fi' => 'Science Fiction',
+            'Sport' => 'Sport',
+            'Talk Show' => 'Talk Show',
+        ],
+    ],
+
+    'tmdb' => [
+        'exports' => 'https://files.tmdb.org/p/exports/',
+    ],
+
+    'omdb' => [
+        'key' => env('OMDB_API_TOKEN'),
+    ],
+
+    'trakt' => [
+        'key' => env('TRAKT_API_TOKEN'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Seasons
+    |--------------------------------------------------------------------------
+    |
+    | Mapping of start month to season name.
+    |
+    */
+    'seasons' => [
+        1 => 'winter',
+        4 => 'spring',
+        7 => 'summer',
+        10 => 'fall',
     ],
 ];

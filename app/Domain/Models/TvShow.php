@@ -2,10 +2,58 @@
 
 namespace App\Domain\Models;
 
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Domain\Models\TvShow.
+ *
+ * @property int $tmdb_id
+ * @property string $name
+ * @property int|null $runtime
+ * @property string|null $backdrop
+ * @property string|null $poster
+ * @property CarbonImmutable|null $first_air_date
+ * @property int|null $release_year
+ * @property string|null $summary
+ * @property string|null $overview
+ * @property string|null $homepage
+ * @property string|null $production_status
+ * @property string|null $type
+ * @property string|null $primary_language
+ * @property string|null $content_rating
+ * @property float $imdb_score
+ * @property int $imdb_votes
+ * @property string|null $imdb_id
+ * @property int|null $tvdb_id
+ * @property array|null $locked_fields
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Collection|Company[] $companies
+ * @property int|null $companies_count
+ * @property Collection|Country[] $countries
+ * @property int|null $countries_count
+ * @property Collection|Genre[] $genres
+ * @property int|null $genres_count
+ * @property Collection|Language[] $languages
+ * @property int|null $languages_count
+ * @property Collection|Network[] $networks
+ * @property int|null $networks_count
+ * @property Collection|TvSeason[] $seasons
+ * @property int|null $seasons_count
+ * @property Collection|WatchProvider[] $watchProviders
+ * @property int|null $watch_providers_count
+ *
+ * @method static Builder|TvShow newModelQuery()
+ * @method static Builder|TvShow newQuery()
+ * @method static Builder|TvShow query()
+ * @mixin \Eloquent
+ */
 class TvShow extends Model
 {
     /** {@inheritDoc} */
@@ -17,7 +65,6 @@ class TvShow extends Model
     /** {@inheritDoc} */
     protected $guarded = ['created_at', 'updated_at'];
     protected $casts = [
-        'adult' => 'boolean',
         'first_air_date' => 'immutable_date',
         'imdb_score' => 'float',
         'locked_fields' => 'array',
@@ -53,6 +100,14 @@ class TvShow extends Model
     public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class, 'genre_tv_show', 'tv_show_id', 'genre_id');
+    }
+
+    /**
+     * Many-To-Many: One TV show has many keywords.
+     */
+    public function keywords(): BelongsToMany
+    {
+        return $this->belongsToMany(Keyword::class, 'keyword_tv_show', 'tv_show_id', 'keyword_id');
     }
 
     /**

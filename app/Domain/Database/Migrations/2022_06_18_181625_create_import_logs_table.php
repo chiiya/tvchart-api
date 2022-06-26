@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class() extends Migration {
     public function up(): void
     {
-        Schema::create('network_mappings', function (Blueprint $table): void {
+        Schema::create('import_logs', function (Blueprint $table): void {
             $table->id();
-            $table->unsignedBigInteger('source');
-            $table->unsignedBigInteger('target');
+            $table->string('filename')->nullable()->index();
+            $table->tinyInteger('status')->index();
+            $table->string('result')->nullable()->index();
+            $table->string('import_type')->index();
             $table->timestamps();
-
-            $table->foreign('target')->references('tmdb_id')->on('networks')->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('network_mappings');
+        Schema::dropIfExists('import_logs');
     }
 };
