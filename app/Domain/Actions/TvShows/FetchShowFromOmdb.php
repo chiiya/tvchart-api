@@ -11,7 +11,7 @@ use Illuminate\Support\Arr;
 class FetchShowFromOmdb
 {
     public function __construct(
-        private OmdbClient $client,
+        private readonly OmdbClient $client,
     ) {}
 
     /**

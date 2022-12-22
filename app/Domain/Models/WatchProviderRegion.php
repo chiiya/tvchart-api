@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|WatchProviderRegion newModelQuery()
  * @method static Builder|WatchProviderRegion newQuery()
  * @method static Builder|WatchProviderRegion query()
+ *
  * @mixin \Eloquent
  */
 class WatchProviderRegion extends Model

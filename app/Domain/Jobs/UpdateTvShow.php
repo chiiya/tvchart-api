@@ -3,6 +3,9 @@
 namespace App\Domain\Jobs;
 
 use App\Domain\DTOs\UpdateTvShowData;
+use App\Domain\Exceptions\EntityDeletedException;
+use App\Domain\Exceptions\InsufficientDataException;
+use App\Domain\Exceptions\ShowIsAdultException;
 use App\Domain\Models\TvShow;
 use App\Domain\Pipelines\UpdateTvShowPipeline;
 use Illuminate\Bus\Queueable;
@@ -18,10 +21,10 @@ class UpdateTvShow implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+    public int $timeout = 180;
 
     public function __construct(
-        private int $id,
-        private ?string $name,
+        private readonly int $id,
     ) {}
 
     /**
@@ -29,7 +32,11 @@ class UpdateTvShow implements ShouldQueue
      */
     public function handle(): void
     {
-        UpdateTvShowPipeline::run(new UpdateTvShowData(id: $this->id, name: $this->name, show: new TvShow));
+        try {
+            UpdateTvShowPipeline::run(new UpdateTvShowData(id: $this->id, show: new TvShow));
+        } catch (InsufficientDataException | EntityDeletedException | ShowIsAdultException) {
+            // Skip this show
+        }
     }
 
     public function middleware(): array

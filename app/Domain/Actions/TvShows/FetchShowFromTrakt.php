@@ -10,7 +10,7 @@ use Illuminate\Http\Client\RequestException;
 class FetchShowFromTrakt
 {
     public function __construct(
-        private TraktClient $client,
+        private readonly TraktClient $client,
     ) {}
 
     /**
@@ -26,6 +26,7 @@ class FetchShowFromTrakt
 
         try {
             $members = $this->client->getMemberCount($data->imdb_id);
+            $show = $this->client->getShowSummary($data->imdb_id);
         } catch (RequestException $exception) {
             if ($exception->response->status() === 404) {
                 return $next($data);
@@ -34,7 +35,14 @@ class FetchShowFromTrakt
             throw $exception;
         }
 
-        $data->trakt = ['trakt_members' => $members];
+        $data->trakt = [
+            'trakt_members' => $members,
+            'runtime' => $show['runtime'],
+        ];
+
+        $mappings = config('tv-chart.genres.trakt');
+        $genres = array_intersect(array_keys($mappings), $show['genres']);
+        $data->genres = array_merge($data->genres, array_map(fn (string $genre) => $mappings[$genre], $genres));
 
         return $next($data);
     }

@@ -27,7 +27,7 @@ class ProcessExport
         $this->imports->startImport($data->type, $data->filename);
         $strategy->execute($data);
         $this->imports->finishImport($data->type, $data->filename, ImportResult::PROCESSED);
-        $data->file->delete();
+        $data->file?->delete();
 
         return $next($data);
     }

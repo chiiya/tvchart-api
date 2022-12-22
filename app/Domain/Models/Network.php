@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Network newModelQuery()
  * @method static Builder|Network newQuery()
  * @method static Builder|Network query()
+ *
  * @mixin \Eloquent
  */
 class Network extends Model

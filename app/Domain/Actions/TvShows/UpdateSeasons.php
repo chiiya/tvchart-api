@@ -4,6 +4,7 @@ namespace App\Domain\Actions\TvShows;
 
 use App\Domain\DTOs\UpdateTvSeasonData;
 use App\Domain\DTOs\UpdateTvShowData;
+use App\Domain\Exceptions\EntityDeletedException;
 use App\Domain\Models\TvSeason;
 use App\Domain\Pipelines\UpdateTvSeasonPipeline;
 use Chiiya\Tmdb\Entities\Television\TvShowDetails;
@@ -20,12 +21,16 @@ class UpdateSeasons
         $this->deleteMissingSeasons($data->tmdb);
 
         foreach ($data->tmdb->seasons as $season) {
-            UpdateTvSeasonPipeline::run(new UpdateTvSeasonData(
-                id: $season->id,
-                number: $season->season_number,
-                show: $data->show,
-                season: new TvSeason,
-            ));
+            try {
+                UpdateTvSeasonPipeline::run(new UpdateTvSeasonData(
+                    id: $season->id,
+                    number: $season->season_number,
+                    show: $data->show,
+                    season: new TvSeason,
+                ));
+            } catch (EntityDeletedException) {
+                // Continue
+            }
         }
 
         return $next($data);

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Company newModelQuery()
  * @method static Builder|Company newQuery()
  * @method static Builder|Company query()
+ *
  * @mixin \Eloquent
  */
 class Company extends Model

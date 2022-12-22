@@ -4,16 +4,16 @@ namespace App\Domain\DTOs;
 
 use App\Domain\Models\TvShow;
 use Chiiya\Tmdb\Entities\Television\TvShowDetails;
-use Spatie\DataTransferObject\DataTransferObject;
 
-class UpdateTvShowData extends DataTransferObject
+class UpdateTvShowData
 {
-    public int $id;
-    public ?string $name;
-    public ?string $imdb_id;
-    public TvShow $show;
-    public ?TvShowDetails $tmdb;
-    public array $omdb = [];
-    public array $trakt = [];
-    public array $genres = [];
+    public function __construct(
+        public int $id,
+        public TvShow $show,
+        public ?string $imdb_id = null,
+        public ?TvShowDetails $tmdb = null,
+        public array $omdb = [],
+        public array $trakt = [],
+        public array $genres = [],
+    ) {}
 }

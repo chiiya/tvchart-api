@@ -2,6 +2,12 @@
 
 namespace App\Application\Console;
 
+use App\Domain\Console\ImportChanges;
+use App\Domain\Console\UpdateCompanies;
+use App\Domain\Console\UpdateCountries;
+use App\Domain\Console\UpdateLanguages;
+use App\Domain\Console\UpdateNetworks;
+use App\Domain\Console\UpdateWatchProviders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -21,6 +27,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command(UpdateCompanies::class)->daily();
+        $schedule->command(UpdateCountries::class)->daily();
+        $schedule->command(UpdateLanguages::class)->daily();
+        $schedule->command(UpdateNetworks::class)->daily();
+        $schedule->command(UpdateWatchProviders::class)->daily();
+        $schedule->command(ImportChanges::class)->dailyAt('00:15');
     }
 
     /**

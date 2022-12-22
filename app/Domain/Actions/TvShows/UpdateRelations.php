@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class UpdateRelations
 {
     public function __construct(
-        private CachingService $cache,
+        private readonly CachingService $cache,
     ) {}
 
     /**
@@ -23,7 +23,6 @@ class UpdateRelations
         $genres = $this->cache->getGenres()->filter(fn (Genre $genre) => in_array($genre->name, $data->genres, true));
 
         $data->show->genres()->sync($genres->pluck('id')->all());
-        $data->show->keywords()->sync(collect($data->tmdb->keywords ?? [])->pluck('id')->all());
         $data->show->networks()->sync(collect($data->tmdb->networks)->pluck('id')->all());
         $data->show->companies()->sync(collect($data->tmdb->production_companies)->pluck('id')->all());
         $data->show->languages()->sync($data->tmdb->languages);
@@ -39,10 +38,16 @@ class UpdateRelations
      */
     private function getWatchProviderPivotEntries(array $lists): array
     {
+        $countries = $this->cache->getCountryCodes();
+
         return collect($lists)
+            ->filter(fn (WatchProviderList $list) => isset($countries[$list->country]))
             ->map(
                 fn (WatchProviderList $list) => $this->getProviderIds($list)
-                    ->map(fn (int $id) => ['watch_provider_id' => $id, 'region' => $list->country])
+                    ->map(fn (int $id) => [
+                        'watch_provider_id' => $id,
+                        'region' => $list->country,
+                    ])
                     ->all(),
             )
             ->flatten(1)

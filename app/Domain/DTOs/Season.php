@@ -3,13 +3,14 @@
 namespace App\Domain\DTOs;
 
 use Carbon\CarbonImmutable;
-use Spatie\DataTransferObject\DataTransferObject;
 
-class Season extends DataTransferObject
+final class Season
 {
-    public string $name;
-    public CarbonImmutable $start;
-    public CarbonImmutable $end;
+    public function __construct(
+        public string $name,
+        public CarbonImmutable $start,
+        public CarbonImmutable $end,
+    ) {}
 
     public function subSeason(): self
     {
@@ -20,7 +21,7 @@ class Season extends DataTransferObject
     {
         $start = $this->start->subMonthsNoOverflow(3 * $count);
 
-        return new static(
+        return new self(
             name: config('tv-chart.seasons')[$start->month],
             start: $start,
             end: $start->addMonths(2)->endOfMonth(),
@@ -36,7 +37,7 @@ class Season extends DataTransferObject
     {
         $start = $this->start->addMonthsNoOverflow(3 * $count);
 
-        return new static(
+        return new self(
             name: config('tv-chart.seasons')[$start->month],
             start: $start,
             end: $start->addMonths(2)->endOfMonth(),

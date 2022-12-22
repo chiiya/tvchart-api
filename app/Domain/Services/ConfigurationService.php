@@ -5,7 +5,6 @@ namespace App\Domain\Services;
 use App\Domain\Models\Country;
 use App\Domain\Models\Language;
 use App\Domain\Models\WatchProvider;
-use App\Domain\Models\WatchProviderRegion;
 use Chiiya\Tmdb\Entities\Configuration\Country as TmdbCountry;
 use Chiiya\Tmdb\Entities\Configuration\Language as TmdbLanguage;
 use Chiiya\Tmdb\Entities\WatchProviders\WatchProvider as TmdbWatchProvider;
@@ -49,12 +48,6 @@ class ConfigurationService
      */
     public function updateWatchProviders(): void
     {
-        $regions = $this->providers->getAvailableRegions();
-        WatchProviderRegion::query()->upsert(collect($regions)->map(fn (TmdbCountry $country) => [
-            'country' => $country->country,
-            'native_name' => $country->native_name,
-        ])->all(), ['country'], ['native_name']);
-
         $providers = $this->providers->getTvProviders();
         WatchProvider::query()->upsert(collect($providers)->map(fn (TmdbWatchProvider $provider) => [
             'tmdb_id' => $provider->provider_id,

@@ -4,6 +4,7 @@ namespace App\Domain\Actions\TvShows;
 
 use App\Domain\DTOs\UpdateTvShowData;
 use App\Domain\Exceptions\EntityDeletedException;
+use App\Domain\Exceptions\InsufficientDataException;
 use App\Domain\Exceptions\ShowIsAdultException;
 use Chiiya\Tmdb\Entities\Television\TvShowDetails;
 use Chiiya\Tmdb\Query\AppendToResponse;
@@ -28,18 +29,19 @@ class FetchShowFromTmdb
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
         try {
-            $data->tmdb = $this->tmdb->getTvShow($data->show->tmdb_id, [
+            $data->tmdb = $this->tmdb->getTvShow($data->id, [
                 new AppendToResponse([
                     AppendToResponse::EXTERNAL_IDS,
                     AppendToResponse::CONTENT_RATINGS,
-                    AppendToResponse::KEYWORDS,
                     AppendToResponse::WATCH_PROVIDERS,
                 ]),
             ]);
         } catch (RequestException $exception) {
             // Show was deleted from TMDB
             if ($exception->response->status() === 404) {
-                $data->show->delete();
+                if ($data->show->exists) {
+                    $data->show->delete();
+                }
 
                 throw new EntityDeletedException;
             }
@@ -47,9 +49,15 @@ class FetchShowFromTmdb
             throw $exception;
         }
 
+        if ($data->tmdb->name === null) {
+            throw new InsufficientDataException;
+        }
+
         // Skip adult shows
         if ($data->tmdb->adult) {
-            $data->show->delete();
+            if ($data->show->exists) {
+                $data->show->delete();
+            }
 
             throw new ShowIsAdultException;
         }

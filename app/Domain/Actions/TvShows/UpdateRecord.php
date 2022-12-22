@@ -15,12 +15,19 @@ class UpdateRecord
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
-        $data->show->update(array_merge(
+        if (! $data->show->exists) {
+            $data->show->fill([
+                'tmdb_id' => $data->id,
+            ]);
+        }
+
+        $data->show->fill(array_merge(
             $this->getBaseAttributes($data->tmdb),
-            $this->getCustomAttributes($data->tmdb),
+            $this->getCustomAttributes($data->tmdb, $data->trakt),
             $data->omdb,
-            $data->trakt,
+            Arr::except($data->trakt, ['runtime']),
         ));
+        $data->show->save();
 
         return $next($data);
     }
@@ -31,10 +38,11 @@ class UpdateRecord
     private function getBaseAttributes(TvShowDetails $data): array
     {
         return Arr::only($data->toArray(), [
+            'name',
+            'original_name',
             'first_air_date',
             'release_year',
             'overview',
-            'homepage',
             'type',
             'popularity',
         ]);
@@ -43,10 +51,10 @@ class UpdateRecord
     /**
      * Get custom attributes from TMDB response with different naming or transformation logic.
      */
-    private function getCustomAttributes(TvShowDetails $data): array
+    private function getCustomAttributes(TvShowDetails $data, array $trakt): array
     {
         return [
-            'runtime' => $data->episode_run_time[0] ?? null,
+            'runtime' => $data->episode_run_time[0] ?? $trakt['runtime'] ?? null,
             'backdrop' => $data->backdrop_path,
             'poster' => $data->poster_path,
             'production_status' => ProductionStatus::fromResponse($data->status),

@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|WatchProvider newModelQuery()
  * @method static Builder|WatchProvider newQuery()
  * @method static Builder|WatchProvider query()
+ *
  * @mixin \Eloquent
  */
 class WatchProvider extends Model

@@ -5,14 +5,15 @@ namespace App\Domain\DTOs;
 use App\Domain\Enumerators\ImportType;
 use Chiiya\Common\Entities\DownloadedFile;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\DataTransferObject\DataTransferObject;
 
-class TmdbExport extends DataTransferObject
+class TmdbExport
 {
-    public ImportType $type;
-    public string $filename;
-    public string $strategy;
-    public Model $model;
-    public array $ids = [];
-    public ?DownloadedFile $file;
+    public function __construct(
+        public ImportType $type,
+        public string $filename,
+        public string $strategy,
+        public Model $model,
+        public ?DownloadedFile $file = null,
+        public array $ids = [],
+    ) {}
 }

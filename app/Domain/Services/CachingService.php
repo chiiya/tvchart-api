@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Domain\Models\Country;
 use App\Domain\Models\Genre;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 class CachingService
 {
     public function __construct(
-        private CacheRepository $cache,
+        private readonly CacheRepository $cache,
     ) {}
 
     /**
@@ -18,5 +19,17 @@ class CachingService
     public function getGenres(): Collection
     {
         return $this->cache->remember('genres', now()->addDay(), fn () => Genre::query()->get());
+    }
+
+    public function getCountryCodes(): array
+    {
+        return $this->cache->remember(
+            'country-codes',
+            now()->addDay(),
+            fn () => Country::query()
+                ->get()
+                ->pluck('country_code', 'country_code')
+                ->all(),
+        );
     }
 }

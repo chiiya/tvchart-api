@@ -5,6 +5,5 @@ namespace App\Domain\Enumerators;
 enum ImportType: string
 {
     case COMPANIES = 'companies';
-    case KEYWORDS = 'keywords';
     case NETWORKS = 'networks';
 }

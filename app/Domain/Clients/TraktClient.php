@@ -8,6 +8,24 @@ use Illuminate\Support\Facades\Http;
 class TraktClient
 {
     /**
+     * Get extended show information for the given IMDB id from the Trakt API.
+     *
+     * @throws RequestException
+     */
+    public function getShowSummary(string $imdbId): array
+    {
+        $response = Http::asJson()
+            ->withHeaders([
+                'trakt-api-version' => 2,
+                'trakt-api-key' => config('tv-chart.trakt.key'),
+            ])
+            ->get("https://api.trakt.tv/shows/{$imdbId}?extended=full");
+        $response->throw();
+
+        return $response->json();
+    }
+
+    /**
      * Get show member count for the given IMDB id from the Trakt API.
      *
      * @throws RequestException

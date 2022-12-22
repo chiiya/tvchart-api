@@ -3,7 +3,6 @@
 namespace App\Domain\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,12 +14,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Genre newModelQuery()
  * @method static Builder|Genre newQuery()
  * @method static Builder|Genre query()
+ *
  * @mixin \Eloquent
  */
 class Genre extends Model
 {
-    use HasFactory;
-
     /** {@inheritDoc} */
     public $timestamps = false;
 

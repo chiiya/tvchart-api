@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Language newModelQuery()
  * @method static Builder|Language newQuery()
  * @method static Builder|Language query()
+ *
  * @mixin \Eloquent
  */
 class Language extends Model

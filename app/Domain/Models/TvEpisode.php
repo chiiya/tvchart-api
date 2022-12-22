@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TvEpisode newModelQuery()
  * @method static Builder|TvEpisode newQuery()
  * @method static Builder|TvEpisode query()
+ *
  * @mixin \Eloquent
  */
 class TvEpisode extends Model
@@ -47,6 +48,8 @@ class TvEpisode extends Model
 
     /**
      * One-To-Many: One TV episode belongs to one TV season.
+     *
+     * @return BelongsTo<TvSeason, TvEpisode>
      */
     public function show(): BelongsTo
     {

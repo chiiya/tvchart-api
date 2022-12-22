@@ -5,14 +5,15 @@ namespace App\Domain\DTOs;
 use App\Domain\Models\TvSeason;
 use App\Domain\Models\TvShow;
 use Chiiya\Tmdb\Entities\Television\TvSeasonDetails;
-use Spatie\DataTransferObject\DataTransferObject;
 
-class UpdateTvSeasonData extends DataTransferObject
+class UpdateTvSeasonData
 {
-    public int $id;
-    public int $number;
-    public TvShow $show;
-    public TvSeason $season;
-    public ?TvSeasonDetails $tmdb;
-    public array $trakt = [];
+    public function __construct(
+        public int $id,
+        public int $number,
+        public TvShow $show,
+        public TvSeason $season,
+        public ?TvSeasonDetails $tmdb = null,
+        public array $trakt = [],
+    ) {}
 }

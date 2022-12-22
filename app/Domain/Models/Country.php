@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Country newModelQuery()
  * @method static Builder|Country newQuery()
  * @method static Builder|Country query()
+ *
  * @mixin \Eloquent
  */
 class Country extends Model

@@ -17,14 +17,14 @@ class OmdbClient
         $response = Http::get('https://www.omdbapi.com?'.http_build_query([
             'apikey' => config('tv-chart.omdb.key'),
             'i' => $imdbId,
-            't' => 'series',
             'plot' => 'short',
         ]));
         $response->throw();
+        $genres = $response->json('Genre');
 
         return [
             'summary' => $response->json('Plot') ?: null,
-            'genres' => explode(', ', $response->json('Genre')),
+            'genres' => $genres ? explode(', ', $genres) : [],
         ];
     }
 }

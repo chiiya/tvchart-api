@@ -7,14 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class() extends Migration {
     public function up(): void
     {
-        Schema::create('keywords', function (Blueprint $table): void {
-            $table->unsignedBigInteger('tmdb_id')->primary();
-            $table->string('name');
+        Schema::table('tv_shows', function (Blueprint $table): void {
+            $table->dropColumn('homepage');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('keywords');
+        Schema::table('tv_shows', function (Blueprint $table): void {
+            $table->string('homepage')->nullable()->after('overview');
+        });
     }
 };

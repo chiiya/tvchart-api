@@ -14,7 +14,8 @@ use Illuminate\Support\Carbon;
  * App\Domain\Models\TvShow.
  *
  * @property int $tmdb_id
- * @property string $name
+ * @property string $original_name
+ * @property string|null $name
  * @property int|null $runtime
  * @property string|null $backdrop
  * @property string|null $poster
@@ -22,18 +23,20 @@ use Illuminate\Support\Carbon;
  * @property int|null $release_year
  * @property string|null $summary
  * @property string|null $overview
- * @property string|null $homepage
  * @property string|null $production_status
  * @property string|null $type
  * @property string|null $primary_language
  * @property string|null $content_rating
  * @property float $imdb_score
  * @property int $imdb_votes
+ * @property int $trakt_members
+ * @property float|null $popularity
  * @property string|null $imdb_id
  * @property int|null $tvdb_id
  * @property array|null $locked_fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool|null $is_whitelisted
  * @property Collection|Company[] $companies
  * @property int|null $companies_count
  * @property Collection|Country[] $countries
@@ -52,6 +55,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TvShow newModelQuery()
  * @method static Builder|TvShow newQuery()
  * @method static Builder|TvShow query()
+ *
  * @mixin \Eloquent
  */
 class TvShow extends Model
@@ -72,6 +76,8 @@ class TvShow extends Model
 
     /**
      * Many-To-Many: One TV show has many production companies.
+     *
+     * @return BelongsToMany<Company>
      */
     public function companies(): BelongsToMany
     {
@@ -80,6 +86,8 @@ class TvShow extends Model
 
     /**
      * Many-To-Many: One TV show has many production/origin countries.
+     *
+     * @return BelongsToMany<Country>
      */
     public function countries(): BelongsToMany
     {
@@ -88,6 +96,8 @@ class TvShow extends Model
 
     /**
      * Many-To-Many: One TV show has many spoken/origin languages.
+     *
+     * @return BelongsToMany<Language>
      */
     public function languages(): BelongsToMany
     {
@@ -96,6 +106,8 @@ class TvShow extends Model
 
     /**
      * Many-To-Many: One TV show has many genres.
+     *
+     * @return BelongsToMany<Genre>
      */
     public function genres(): BelongsToMany
     {
@@ -103,15 +115,9 @@ class TvShow extends Model
     }
 
     /**
-     * Many-To-Many: One TV show has many keywords.
-     */
-    public function keywords(): BelongsToMany
-    {
-        return $this->belongsToMany(Keyword::class, 'keyword_tv_show', 'tv_show_id', 'keyword_id');
-    }
-
-    /**
      * Many-To-Many: One TV show has many networks.
+     *
+     * @return BelongsToMany<Network>
      */
     public function networks(): BelongsToMany
     {
@@ -120,6 +126,8 @@ class TvShow extends Model
 
     /**
      * Many-To-Many: One TV show has many watch providers, grouped by region.
+     *
+     * @return BelongsToMany<WatchProvider>
      */
     public function watchProviders(): BelongsToMany
     {
@@ -133,6 +141,8 @@ class TvShow extends Model
 
     /**
      * One-To-Many: One TV show has many TV seasons.
+     *
+     * @return HasMany<TvSeason>
      */
     public function seasons(): HasMany
     {

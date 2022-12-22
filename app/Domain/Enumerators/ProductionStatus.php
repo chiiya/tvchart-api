@@ -11,6 +11,7 @@ enum ProductionStatus: string
     case CANCELLED = 'cancelled';
     case PILOT = 'pilot';
     case MISC = 'misc';
+
     public static function fromResponse(string $response): ProductionStatus
     {
         return match ($response) {

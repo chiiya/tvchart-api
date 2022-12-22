@@ -13,13 +13,12 @@ class FetchRecord
      */
     public function handle(UpdateTvSeasonData $data, Closure $next): mixed
     {
-        $season = TvSeason::query()
+        $data->season = TvSeason::query()
             ->updateOrCreate(
                 ['tmdb_id' => $data->id],
                 ['number' => $data->number, 'tv_show_id' => $data->show->tmdb_id],
             )
             ->load('episodes');
-        $data->season = $season;
 
         return $next($data);
     }

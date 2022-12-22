@@ -17,14 +17,17 @@ use Illuminate\Support\Carbon;
  * @property int $tv_show_id
  * @property int $number
  * @property string|null $name
- * @property string|null $summary
+ * @property string|null $overview
  * @property string|null $poster
  * @property CarbonImmutable|null $first_air_date
  * @property int|null $release_year
+ * @property string $trakt_score
  * @property int|null $tvdb_id
  * @property array|null $locked_fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $season_year
+ * @property string|null $season
  * @property Collection|TvEpisode[] $episodes
  * @property int|null $episodes_count
  * @property TvShow $show
@@ -32,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TvSeason newModelQuery()
  * @method static Builder|TvSeason newQuery()
  * @method static Builder|TvSeason query()
+ *
  * @mixin \Eloquent
  */
 class TvSeason extends Model
@@ -51,6 +55,8 @@ class TvSeason extends Model
 
     /**
      * One-To-Many: One TV season belongs to one TV show.
+     *
+     * @return BelongsTo<TvShow, TvSeason>
      */
     public function show(): BelongsTo
     {
@@ -59,6 +65,8 @@ class TvSeason extends Model
 
     /**
      * One-To-Many: One TV season has many TV episodes.
+     *
+     * @return HasMany<TvEpisode>
      */
     public function episodes(): HasMany
     {

@@ -9,7 +9,10 @@ return [
     | \Chiiya\FilamentAccessControl\Enumerators\Feature::ACCOUNT_EXPIRY
     | \Chiiya\FilamentAccessControl\Enumerators\Feature::TWO_FACTOR
     */
-    'features' => [],
+    'features' => [
+        //        \Chiiya\FilamentAccessControl\Enumerators\Feature::ACCOUNT_EXPIRY,
+        //        \Chiiya\FilamentAccessControl\Enumerators\Feature::TWO_FACTOR,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -18,6 +21,15 @@ return [
     | Rules for the password set during the passwort reset flow.
     */
     'password_rules' => ['min:8'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password Hint
+    |--------------------------------------------------------------------------
+    | Helper text displayed when setting a new password on the passwort-reset
+    | page. Useful for hinting at complex password requirements.
+    */
+    'password_hint' => null,
 
     /*
     |--------------------------------------------------------------------------

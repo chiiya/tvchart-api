@@ -27,8 +27,6 @@ class UpdateNetworks extends TimedCommand
 
     /**
      * Execute the console command.
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function handle(): int
     {

@@ -6,7 +6,6 @@ use App\Domain\Actions\TvShows\FetchRecord;
 use App\Domain\Actions\TvShows\FetchShowFromOmdb;
 use App\Domain\Actions\TvShows\FetchShowFromTmdb;
 use App\Domain\Actions\TvShows\FetchShowFromTrakt;
-use App\Domain\Actions\TvShows\UpdateGenres;
 use App\Domain\Actions\TvShows\UpdateRecord;
 use App\Domain\Actions\TvShows\UpdateRelations;
 use App\Domain\Actions\TvShows\UpdateSeasons;
@@ -22,7 +21,6 @@ class UpdateTvShowPipeline extends Pipeline
         FetchShowFromTrakt::class,
         UpdateRecord::class,
         UpdateRelations::class,
-        UpdateGenres::class,
         UpdateSeasons::class,
     ];
 

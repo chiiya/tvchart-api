@@ -2,9 +2,10 @@
 
 namespace App\Domain\Clients;
 
+use App\Domain\DTOs\Season;
 use App\Domain\Jobs\UpdateTvShow;
-use App\Domain\Services\SeasonService;
 use Chiiya\Tmdb\Repositories\BrowseRepository;
+use Chiiya\Tmdb\Repositories\ChangeRepository;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class TmdbClient
@@ -12,27 +13,47 @@ class TmdbClient
     use DispatchesJobs;
 
     public function __construct(
-        private BrowseRepository $browse,
-        private SeasonService $service,
+        private readonly BrowseRepository $browse,
+        private readonly ChangeRepository $changes,
     ) {}
 
-    public function updateShowsFromCurrentAndLastSeason(int $page = 1): void
+    /**
+     * Import all shows since the given $season.
+     */
+    public function updateShowsSince(Season $season, int $page = 1): void
     {
-        $currentSeason = $this->service->getCurrentSeason();
-
         $response = $this->browse->discoverTV([
-            'air_date.gte' => $currentSeason->subSeason()->start->format('Y-m-d'),
-            'air_date.lte' => $currentSeason->end->format('Y-m-d'),
+            'air_date.gte' => $season->start->format('Y-m-d'),
+            'air_date.lte' => $season->end->format('Y-m-d'),
             'page' => $page,
         ]);
 
         foreach ($response->results as $result) {
-            $this->dispatch(new UpdateTvShow($result->id, $result->name));
-            break;
+            $this->dispatch(new UpdateTvShow($result->id));
         }
 
-//        if ($response->page < $response->total_pages) {
-//            $this->updateShowsFromCurrentAndLastSeason($page + 1);
-//        }
+        if ($response->page < $response->total_pages) {
+            $this->updateShowsSince($season, $page + 1);
+        }
+    }
+
+    /**
+     * Import all recently updated or created tv shows.
+     */
+    public function updateChangedShows(int $page = 1): void
+    {
+        $response = $this->changes->getTvChanges([
+            'page' => $page,
+        ]);
+
+        foreach ($response->results as $result) {
+            if (! $result->adult) {
+                $this->dispatch(new UpdateTvShow($result->id));
+            }
+        }
+
+        if ($response->page < $response->total_pages) {
+            $this->updateChangedShows($page + 1);
+        }
     }
 }
