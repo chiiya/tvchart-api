@@ -357,16 +357,16 @@
         },
         {
             "name": "chiiya/filament-access-control",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chiiya/filament-access-control.git",
-                "reference": "64ca95d343ee02974834003343b387dcee538aa4"
+                "reference": "12adceae37a52c88c52435a07017e23b37d8fa5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chiiya/filament-access-control/zipball/64ca95d343ee02974834003343b387dcee538aa4",
-                "reference": "64ca95d343ee02974834003343b387dcee538aa4",
+                "url": "https://api.github.com/repos/chiiya/filament-access-control/zipball/12adceae37a52c88c52435a07017e23b37d8fa5c",
+                "reference": "12adceae37a52c88c52435a07017e23b37d8fa5c",
                 "shasum": ""
             },
             "require": {
@@ -418,7 +418,7 @@
             ],
             "support": {
                 "issues": "https://github.com/chiiya/filament-access-control/issues",
-                "source": "https://github.com/chiiya/filament-access-control/tree/1.6.0"
+                "source": "https://github.com/chiiya/filament-access-control/tree/1.6.1"
             },
             "funding": [
                 {
@@ -426,7 +426,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-22T11:05:46+00:00"
+            "time": "2022-12-22T21:11:11+00:00"
         },
         {
             "name": "chiiya/laravel-tmdb",
@@ -14477,16 +14477,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "11.1.20",
+            "version": "11.1.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "860b88c552af9682ad9715e8fa400916fa529e24"
+                "reference": "c2fbad15556e4ece547bff4473e9670a1e19d072"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/860b88c552af9682ad9715e8fa400916fa529e24",
-                "reference": "860b88c552af9682ad9715e8fa400916fa529e24",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/c2fbad15556e4ece547bff4473e9670a1e19d072",
+                "reference": "c2fbad15556e4ece547bff4473e9670a1e19d072",
                 "shasum": ""
             },
             "require": {
@@ -14516,7 +14516,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/11.1.20"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/11.1.21"
             },
             "funding": [
                 {
@@ -14528,7 +14528,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-19T12:28:29+00:00"
+            "time": "2022-12-22T15:38:34+00:00"
         },
         {
             "name": "symplify/package-builder",
