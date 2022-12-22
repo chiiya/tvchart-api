@@ -30,7 +30,7 @@ class ApplicationDatabaseSeeder extends Seeder
         $this->call(FilamentAccessControlSeeder::class);
 
         foreach (self::$users as $user) {
-            $password = config('aral.admin.password');
+            $password = config('tv-chart.admin.password');
             $admin = FilamentUser::query()->create(array_merge($user, [
                 'password' => Hash::make($password ?: Str::random(40)),
             ]));
