@@ -9,6 +9,7 @@ use App\Domain\Actions\TvShows\FetchShowFromTrakt;
 use App\Domain\Actions\TvShows\UpdateRecord;
 use App\Domain\Actions\TvShows\UpdateRelations;
 use App\Domain\Actions\TvShows\UpdateSeasons;
+use App\Domain\Actions\TvShows\UpdateStatus;
 use App\Domain\DTOs\UpdateTvShowData;
 use Illuminate\Pipeline\Pipeline;
 
@@ -22,6 +23,7 @@ class UpdateTvShowPipeline extends Pipeline
         UpdateRecord::class,
         UpdateRelations::class,
         UpdateSeasons::class,
+        UpdateStatus::class,
     ];
 
     /**

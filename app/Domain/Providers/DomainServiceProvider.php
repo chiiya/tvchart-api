@@ -17,6 +17,6 @@ class DomainServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(module_path('Domain', 'Database/Migrations'));
         }
 
-        RateLimiter::for('tmdb', fn () => Limit::perMinute(60)->by('tmdb'));
+        RateLimiter::for('tmdb', fn () => Limit::perMinute(30)->by('tmdb'));
     }
 }

@@ -7,8 +7,10 @@ node_modules
 /public/fonts
 /public/mix-manifest.json
 /public/vendor
+/public/build/
 /storage/*.key
 /vendor
+*.sql
 .env
 .env.backup
 .phpunit.result.cache

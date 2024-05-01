@@ -4,6 +4,7 @@ namespace App\Domain\Services;
 
 use App\Domain\Models\Country;
 use App\Domain\Models\Genre;
+use App\Domain\Models\Language;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -13,12 +14,21 @@ class CachingService
         private readonly CacheRepository $cache,
     ) {}
 
-    /**
-     * @return Collection<int, Genre>
-     */
-    public function getGenres(): Collection
+    public function getGenres(): array
     {
-        return $this->cache->remember('genres', now()->addDay(), fn () => Genre::query()->get());
+        return $this->cache->remember(
+            'genres',
+            now()->addDay(),
+            fn () => Genre::query()->get()->pluck('id', 'name')->all(),
+        );
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->cache->remember('languages', now()->addDay(), fn () => Language::query()->get());
     }
 
     public function getCountryCodes(): array

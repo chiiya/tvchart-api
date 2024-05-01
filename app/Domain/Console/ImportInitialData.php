@@ -28,8 +28,8 @@ class ImportInitialData extends TimedCommand
      */
     public function handle(SeasonService $service, TmdbClient $client): int
     {
-        $season = $service->getSeasonForDate(CarbonImmutable::create(2022, 7));
-        $client->updateShowsSince($season);
+        $service->getSeasonForDate(CarbonImmutable::create(2022, 7));
+        $client->updateShowsSince($service->getCurrentSeason());
 
         $this->comment('All jobs have been dispatched. Make sure your queue worker is running.');
 

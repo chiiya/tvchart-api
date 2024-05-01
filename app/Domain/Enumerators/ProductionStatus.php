@@ -19,7 +19,7 @@ enum ProductionStatus: string
             'Planned' => self::PLANNED,
             'In Production' => self::IN_PRODUCTION,
             'Ended' => self::ENDED,
-            'Cancelled' => self::CANCELLED,
+            'Canceled' => self::CANCELLED,
             'Pilot' => self::PILOT,
             default => self::MISC,
         };

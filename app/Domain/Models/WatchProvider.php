@@ -32,4 +32,14 @@ class WatchProvider extends Model
 
     /** {@inheritDoc} */
     protected $guarded = ['created_at', 'updated_at'];
+
+    /**
+     * Is the watch provider whitelisted?
+     */
+    public function isWhitelisted(): bool
+    {
+        $providers = config('tv-chart.whitelist.providers');
+
+        return (bool) (in_array($this->name, $providers, true));
+    }
 }

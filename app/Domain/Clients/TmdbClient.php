@@ -24,7 +24,6 @@ class TmdbClient
     {
         $response = $this->browse->discoverTV([
             'air_date.gte' => $season->start->format('Y-m-d'),
-            'air_date.lte' => $season->end->format('Y-m-d'),
             'page' => $page,
         ]);
 
@@ -44,10 +43,12 @@ class TmdbClient
     {
         $response = $this->changes->getTvChanges([
             'page' => $page,
+            'start_date' => now()->subDay()->format('Y-m-d'),
+            'end_date' => now()->format('Y-m-d'),
         ]);
 
         foreach ($response->results as $result) {
-            if (! $result->adult) {
+            if ($result->id && ! $result->adult) {
                 $this->dispatch(new UpdateTvShow($result->id));
             }
         }

@@ -2,7 +2,10 @@
 
 namespace App\Domain\Models;
 
+use App\Domain\Enumerators\Status;
+use App\Domain\Presenters\TvShowPresenter;
 use Carbon\CarbonImmutable;
+use Chiiya\Common\Presenter\PresentableTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -36,7 +39,8 @@ use Illuminate\Support\Carbon;
  * @property array|null $locked_fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property bool|null $is_whitelisted
+ * @property Status $status
+ * @property bool $flagged_for_review
  * @property Collection|Company[] $companies
  * @property int|null $companies_count
  * @property Collection|Country[] $countries
@@ -60,6 +64,9 @@ use Illuminate\Support\Carbon;
  */
 class TvShow extends Model
 {
+    /** @use PresentableTrait<TvShowPresenter> */
+    use PresentableTrait;
+
     /** {@inheritDoc} */
     public $incrementing = false;
 
@@ -68,11 +75,21 @@ class TvShow extends Model
 
     /** {@inheritDoc} */
     protected $guarded = ['created_at', 'updated_at'];
+
+    /** {@inheritDoc} */
     protected $casts = [
         'first_air_date' => 'immutable_date',
         'imdb_score' => 'float',
         'locked_fields' => 'array',
+        'status' => Status::class,
+        'flagged_for_review' => 'boolean',
     ];
+
+    /** {@inheritDoc} */
+    protected $attributes = [
+        'status' => 0,
+    ];
+    protected string $presenter = TvShowPresenter::class;
 
     /**
      * Many-To-Many: One TV show has many production companies.

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
-
 use App\Application\Providers\ApplicationServiceProvider;
 use App\Application\Providers\EventServiceProvider;
+use App\Application\Providers\HorizonServiceProvider;
 use App\Application\Providers\RouteServiceProvider;
 use Illuminate\Auth\AuthServiceProvider;
 use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
@@ -191,6 +191,8 @@ return [
         ApplicationServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
+        \App\Application\Providers\AuthServiceProvider::class,
+        HorizonServiceProvider::class,
     ],
 
     /*

@@ -3,7 +3,6 @@
 namespace App\Domain\Actions\TvShows;
 
 use App\Domain\DTOs\UpdateTvShowData;
-use App\Domain\Models\Genre;
 use App\Domain\Services\CachingService;
 use Chiiya\Tmdb\Entities\WatchProviders\WatchProviderList;
 use Closure;
@@ -20,9 +19,8 @@ class UpdateRelations
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
-        $genres = $this->cache->getGenres()->filter(fn (Genre $genre) => in_array($genre->name, $data->genres, true));
-
-        $data->show->genres()->sync($genres->pluck('id')->all());
+        $genres = array_intersect_key($this->cache->getGenres(), array_flip($data->genres));
+        $data->show->genres()->sync($genres);
         $data->show->networks()->sync(collect($data->tmdb->networks)->pluck('id')->all());
         $data->show->companies()->sync(collect($data->tmdb->production_companies)->pluck('id')->all());
         $data->show->languages()->sync($data->tmdb->languages);

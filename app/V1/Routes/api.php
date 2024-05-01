@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Illuminate\Http\Request;
+use App\V1\Http\Controllers\SeasonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/v1', fn (Request $request) => $request->user());
+Route::get('/shows/{year}/{season}', [SeasonController::class, 'index'])
+    ->where('year', '20[2-3]\d')
+    ->where('month', '(^0?[1-9]$)|(^1[0-2]$)')
+    ->name('seasons.index');

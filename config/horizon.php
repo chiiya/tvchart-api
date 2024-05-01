@@ -169,8 +169,8 @@ return [
             'maxTime' => 0,
             'maxJobs' => 0,
             'memory' => 128,
-            'tries' => 3,
-            'timeout' => 180,
+            'tries' => 5,
+            'timeout' => 300,
             'nice' => 0,
         ],
     ],
@@ -178,7 +178,7 @@ return [
     'environments' => [
         'production' => [
             'supervisor-1' => [
-                'maxProcesses' => 5,
+                'maxProcesses' => 1,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],

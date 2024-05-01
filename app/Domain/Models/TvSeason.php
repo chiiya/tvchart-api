@@ -70,6 +70,6 @@ class TvSeason extends Model
      */
     public function episodes(): HasMany
     {
-        return $this->hasMany(TvEpisode::class, 'tv_season_id');
+        return $this->hasMany(TvEpisode::class, 'tv_season_id', 'tmdb_id');
     }
 }

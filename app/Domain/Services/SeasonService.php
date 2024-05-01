@@ -12,19 +12,29 @@ class SeasonService
         return $this->getSeasonForDate(CarbonImmutable::now());
     }
 
-    public function getSeasonForDate(CarbonImmutable $date): Season
+    public function getSeason(int $year, string $name): Season
     {
-        return match ($date->month) {
-            1, 2, 3 => $this->createSeason($date, 1),
-            4, 5, 6 => $this->createSeason($date, 4),
-            7, 8, 9 => $this->createSeason($date, 7),
-            default => $this->createSeason($date, 10),
+        return match ($name) {
+            'winter' => $this->createSeason($year, 1),
+            'spring' => $this->createSeason($year, 4),
+            'summer' => $this->createSeason($year, 7),
+            'fall' => $this->createSeason($year, 10),
         };
     }
 
-    private function createSeason(CarbonImmutable $date, int $startMonth): Season
+    public function getSeasonForDate(CarbonImmutable $date): Season
     {
-        $start = CarbonImmutable::create($date->year, $startMonth);
+        return match ($date->month) {
+            1, 2, 3 => $this->createSeason($date->year, 1),
+            4, 5, 6 => $this->createSeason($date->year, 4),
+            7, 8, 9 => $this->createSeason($date->year, 7),
+            default => $this->createSeason($date->year, 10),
+        };
+    }
+
+    private function createSeason(int $year, int $startMonth): Season
+    {
+        $start = CarbonImmutable::create($year, $startMonth);
 
         return new Season(
             name: config('tv-chart.seasons')[$startMonth],

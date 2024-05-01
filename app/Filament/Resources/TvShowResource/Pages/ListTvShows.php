@@ -3,15 +3,21 @@
 namespace App\Filament\Resources\TvShowResource\Pages;
 
 use App\Filament\Resources\TvShowResource;
-use Filament\Pages\Actions\CreateAction;
+use App\Filament\Resources\TvShowResource\Widgets\StatusOverview;
 use Filament\Resources\Pages\ListRecords;
 
 class ListTvShows extends ListRecords
 {
     protected static string $resource = TvShowResource::class;
+    protected static ?string $title = 'TV Shows';
 
-    protected function getActions(): array
+    protected function getHeaderWidgets(): array
     {
-        return [CreateAction::make()];
+        return [StatusOverview::class];
+    }
+
+    protected function getDefaultTableSortColumn(): ?string
+    {
+        return 'tmdb_id';
     }
 }

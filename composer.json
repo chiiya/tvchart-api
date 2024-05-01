@@ -11,12 +11,16 @@
     "chiiya/filament-access-control": "^1.5",
     "chiiya/laravel-tmdb": "^1.2",
     "chiiya/laravel-utilities": "^4.5",
+    "doctrine/dbal": "^3.5",
     "filament/filament": "^2.16",
     "guzzlehttp/guzzle": "^7.5",
     "laravel/framework": "^9.45",
     "laravel/horizon": "^5.10",
     "nwidart/laravel-modules": "^9.0",
     "sentry/sentry-laravel": "^3.1",
+    "sokil/php-isocodes": "*",
+    "sokil/php-isocodes-db-only": "*",
+    "spatie/laravel-activitylog": "^4.7",
     "spatie/laravel-query-builder": "^5.1",
     "symfony/yaml": "^6.2"
   },
@@ -75,7 +79,8 @@
     "allow-plugins": {
       "composer/package-versions-deprecated": true,
       "phpro/grumphp": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "php-http/discovery": true
     }
   },
   "minimum-stability": "dev",

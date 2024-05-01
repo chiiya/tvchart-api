@@ -8,6 +8,7 @@ use App\Domain\Services\SeasonService;
 use Carbon\CarbonImmutable;
 use Chiiya\Tmdb\Entities\Television\TvSeasonDetails;
 use Closure;
+use DateTimeImmutable;
 use Illuminate\Support\Arr;
 
 class UpdateRecord
@@ -61,7 +62,7 @@ class UpdateRecord
      */
     private function getSeason(TvSeasonDetails $data): ?Season
     {
-        if ($data->air_date === null) {
+        if (! $data->air_date instanceof DateTimeImmutable) {
             return null;
         }
 

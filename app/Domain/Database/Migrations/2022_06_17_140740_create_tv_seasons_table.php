@@ -22,6 +22,8 @@ return new class() extends Migration {
             $table->timestamps();
 
             $table->foreign('tv_show_id')->references('tmdb_id')->on('tv_shows')->cascadeOnDelete();
+            $table->index(['number']);
+            $table->index(['tv_show_id']);
         });
     }
 

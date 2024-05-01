@@ -21,7 +21,6 @@ class UpdateTvShow implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    public int $timeout = 180;
 
     public function __construct(
         private readonly int $id,

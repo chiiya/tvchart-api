@@ -145,4 +145,73 @@ return [
         7 => 'summer',
         10 => 'fall',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Whitelist
+    |--------------------------------------------------------------------------
+    |
+    | List of whitelisted (i.e. generally high-quality) entries.
+    |
+    */
+    'whitelist' => [
+        'networks' => [
+            '/^Netflix$/',
+            '/^Amazon$/',
+            '/^Prime Video/',
+            '/^Hulu$/',
+            '/^Apple TV+$/',
+            '/^Disney+$/',
+            '/^Paramount+$/',
+            '/^Peacock$/',
+            '/^BBC One$/',
+            '/^Syfy$/',
+            '/^Showtime$/',
+            '/^HBO/',
+            '/^Max/',
+            '/^AMC/',
+        ],
+        'providers' => [
+            'Netflix',
+            'Amazon Prime Video',
+            'Apple TV Plus',
+            'Disney Plus',
+            'Paramount Plus',
+            'Hulu',
+            'HBO Max',
+            'HBO Go',
+            'Sky Go',
+            'Peacock',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Blacklist
+    |--------------------------------------------------------------------------
+    |
+    | List of blacklisted entries.
+    |
+    */
+    'blacklist' => [
+        'genres' => ['Anime', 'Kids', 'News', 'Reality', 'Soap', 'Sport'],
+        'networks' => ['Investigation Discovery', 'Oxygen', 'Disney Junior', 'Disney XD', 'Disney Channel'],
+        // Not truly blacklisted, but only included when available on an international network
+        'languages' => ['hi', 'te', 'zh', 'cn', 'th', 'ar', 'tr', 'tl'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | International Networks
+    |--------------------------------------------------------------------------
+    |
+    | Networks where content is generally available in multiple languages
+    | internationally.
+    |
+    */
+    'international_networks' => ['Netflix', 'Amazon', 'Prime Video', 'Disney+', 'Apple TV+', 'Paramount+'],
+
+    'countries' => [
+        'KR' => 'South Korea',
+    ],
 ];

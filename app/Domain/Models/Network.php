@@ -32,4 +32,20 @@ class Network extends Model
 
     /** {@inheritDoc} */
     protected $guarded = ['created_at', 'updated_at'];
+
+    /**
+     * Is the network whitelisted?
+     */
+    public function isWhitelisted(): bool
+    {
+        $networks = config('tv-chart.whitelist.networks');
+
+        foreach ($networks as $network) {
+            if (preg_match($network, $this->name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

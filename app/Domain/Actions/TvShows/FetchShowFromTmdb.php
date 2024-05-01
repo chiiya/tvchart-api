@@ -75,7 +75,12 @@ class FetchShowFromTmdb
     {
         $mappings = config('tv-chart.genres.tmdb');
         $genres = array_intersect(array_keys($mappings), Arr::pluck($data->genres, 'name'));
+        $genres = array_map(fn (string $genre) => $mappings[$genre], $genres);
 
-        return array_map(fn (string $genre) => $mappings[$genre], $genres);
+        if (in_array('JP', $data->origin_country, true) && in_array('Animation', $genres, true)) {
+            $genres[] = 'Anime';
+        }
+
+        return $genres;
     }
 }

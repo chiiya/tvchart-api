@@ -3,6 +3,7 @@
 namespace App\Application\Providers;
 
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Filament\Facades\Filament;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\TelescopeServiceProvider as LaravelTelescopeServiceProvider;
 
@@ -18,6 +19,10 @@ class ApplicationServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         }
+
+        Filament::serving(function (): void {
+            Filament::registerViteTheme('resources/css/filament.css');
+        });
     }
 
     /**

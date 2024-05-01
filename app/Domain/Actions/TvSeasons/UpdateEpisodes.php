@@ -6,7 +6,9 @@ use App\Domain\DTOs\UpdateTvSeasonData;
 use App\Domain\Models\TvEpisode;
 use Chiiya\Tmdb\Entities\Television\TvSeasonDetails;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class UpdateEpisodes
 {
@@ -20,7 +22,7 @@ class UpdateEpisodes
         foreach ($data->tmdb->episodes as $attributes) {
             $episode = $this->fetchOrCreateEpisode($data, $attributes->id);
             $episode->fill([
-                'name' => $attributes->name,
+                'name' => Str::limit($attributes->name, 252),
                 'number' => $attributes->episode_number,
                 'first_air_date' => $attributes->air_date,
                 'overview' => $attributes->overview,
@@ -37,7 +39,7 @@ class UpdateEpisodes
      */
     private function fetchOrCreateEpisode(UpdateTvSeasonData $data, int $id): TvEpisode
     {
-        if ($episode = $data->season->episodes->firstWhere('tmdb_id', '=', $id)) {
+        if (($episode = $data->season->episodes->firstWhere('tmdb_id', '=', $id)) instanceof Model) {
             return $episode;
         }
 
