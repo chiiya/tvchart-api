@@ -33,7 +33,7 @@ class UpdateTvShow implements ShouldQueue
     {
         try {
             UpdateTvShowPipeline::run(new UpdateTvShowData(id: $this->id, show: new TvShow));
-        } catch (InsufficientDataException | EntityDeletedException | ShowIsAdultException) {
+        } catch (EntityDeletedException | InsufficientDataException | ShowIsAdultException) {
             // Skip this show
         }
     }

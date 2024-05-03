@@ -5,13 +5,13 @@ namespace App\Filament\Resources\TvShowResource\Widgets;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use Filament\Widgets\StatsOverviewWidget\Card;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatusOverview extends BaseWidget
 {
     protected static ?string $pollingInterval = null;
 
-    protected function getCards(): array
+    protected function getStats(): array
     {
         $stats = TvShow::query()
             ->groupBy('status')
@@ -28,10 +28,10 @@ class StatusOverview extends BaseWidget
         $total = TvShow::query()->count();
 
         return [
-            Card::make('Unreviewed', $unreviewed),
-            Card::make('Whitelisted', ($stats[Status::WHITELISTED->value] ?? 0).'/'.$total),
-            Card::make('Undecided', $stats[Status::UNDECIDED->value] ?? 0),
-            Card::make('Flagged for Review', $flagged),
+            Stat::make('Unreviewed', $unreviewed),
+            Stat::make('Whitelisted', ($stats[Status::WHITELISTED->value] ?? 0).'/'.$total),
+            Stat::make('Undecided', $stats[Status::UNDECIDED->value] ?? 0),
+            Stat::make('Flagged for Review', $flagged),
         ];
     }
 }

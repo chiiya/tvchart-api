@@ -15,8 +15,6 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     public function boot(): void
     {
         parent::boot();
-
-        Horizon::night();
     }
 
     /**
@@ -28,8 +26,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     {
         Gate::define(
             'viewHorizon',
-            fn ($user = null) => Auth::guard('filament')->check()
-            && Auth::guard('filament')->user()->can('horizon.view'),
+            fn () => Auth::guard('filament')->check() && Auth::guard('filament')->user()?->can('horizon.view'),
         );
     }
 }

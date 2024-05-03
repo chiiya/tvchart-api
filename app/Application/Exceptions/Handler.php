@@ -8,9 +8,6 @@ use Throwable;
 class Handler extends ExceptionHandler
 {
     /** {@inheritDoc} */
-    protected $dontReport = [];
-
-    /** {@inheritDoc} */
     protected $dontFlash = ['current_password', 'password', 'password_confirmation'];
 
     /**

@@ -12,7 +12,7 @@ class SeasonController extends Controller
         private readonly TvSeasonService $service,
     ) {}
 
-    public function index(string|int $year, string|int $month): JsonResponse
+    public function index(int|string $year, int|string $month): JsonResponse
     {
         $shows = $this->service->getShowsForMonth((int) $year, (int) $month);
 

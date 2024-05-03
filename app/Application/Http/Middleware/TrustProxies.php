@@ -7,18 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TrustProxies extends Middleware
 {
-    /**
-     * The trusted proxies for this application.
-     *
-     * @var array|string|null
-     */
+    /** {@inheritDoc} */
     protected $proxies;
 
-    /**
-     * The headers that should be used to detect proxies.
-     *
-     * @var int
-     */
+    /** {@inheritDoc} */
     protected $headers
         = Request::HEADER_X_FORWARDED_FOR
         | Request::HEADER_X_FORWARDED_HOST

@@ -22,7 +22,7 @@ class UpdateEpisodes
         foreach ($data->tmdb->episodes as $attributes) {
             $episode = $this->fetchOrCreateEpisode($data, $attributes->id);
             $episode->fill([
-                'name' => Str::limit($attributes->name, 252),
+                'name' => $attributes->name ? Str::limit($attributes->name, 252) : null,
                 'number' => $attributes->episode_number,
                 'first_air_date' => $attributes->air_date,
                 'overview' => $attributes->overview,

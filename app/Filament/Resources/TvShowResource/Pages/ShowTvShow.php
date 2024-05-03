@@ -4,43 +4,20 @@ namespace App\Filament\Resources\TvShowResource\Pages;
 
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
-use App\Domain\Services\CachingService;
 use App\Filament\Resources\TvShowResource;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Pages\Actions\Action;
-use Filament\Resources\Pages\Concerns\HasRecordBreadcrumb;
-use Filament\Resources\Pages\Concerns\HasRelationManagers;
-use Filament\Resources\Pages\Concerns\InteractsWithRecord;
-use Filament\Resources\Pages\Page;
+use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
+use Livewire\Features\SupportRedirects\Redirector;
 
-class ShowTvShow extends Page
+/**
+ * @property TvShow $record
+ */
+class ShowTvShow extends ViewRecord
 {
-    use HasRecordBreadcrumb;
-    use HasRelationManagers;
-    use InteractsWithRecord;
-    public static string $view = 'filament.pages.tv-show';
-    public static ?string $slug = 'show';
     protected static string $resource = TvShowResource::class;
-
-    /** @var TvShow */
-    public $record;
-    public Collection $languages;
-    public Collection $usWatchProviders;
-    public Collection $deWatchProviders;
-
-    public function mount(string|int $record): void
-    {
-        static::authorizeResourceAccess();
-        $this->record = TvShow::query()
-            ->where('tmdb_id', '=', (int) $record)
-            ->with(['seasons', 'genres', 'countries', 'languages', 'networks', 'watchProviders'])
-            ->firstOrFail();
-        $this->usWatchProviders = $this->record->watchProviders->where('pivot.region', '=', 'US');
-        $this->deWatchProviders = $this->record->watchProviders->where('pivot.region', '=', 'DE');
-        $this->languages = resolve(CachingService::class)->getLanguages();
-    }
 
     public function whitelist(): void
     {
@@ -75,7 +52,7 @@ class ShowTvShow extends Page
         Notification::make()->title('Record updated successfully.')->success()->send();
     }
 
-    public function nextUnreviewedRecord()
+    public function nextUnreviewedRecord(): null|Redirector|RedirectResponse
     {
         $record = TvShow::query()
             ->where(
@@ -86,17 +63,17 @@ class ShowTvShow extends Page
             ->whereNotNull('poster')
             ->whereNotNull('overview')
             ->whereNotNull('first_air_date')
-            ->orderByDesc('imdb_votes')
+            ->orderByDesc('first_air_date')
             ->select(['tmdb_id'])
             ->first();
 
         if ($record === null) {
             Notification::make()->title('All records reviewed.')->send();
 
-            return;
+            return null;
         }
 
-        return redirect()->route('filament.resources.tv-shows.view', $record);
+        return redirect()->route('filament.admin.resources.tv-shows.view', $record);
     }
 
     protected function getActions(): array
@@ -126,10 +103,5 @@ class ShowTvShow extends Page
                 ->action('nextUnreviewedRecord')
                 ->label(__('Review Next')),
         ];
-    }
-
-    protected function getTitle(): string
-    {
-        return __('TV Show Details');
     }
 }

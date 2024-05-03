@@ -20,4 +20,9 @@ enum Status: int
             Status::BLACKLISTED_FINAL->value => __('Blacklisted (Final)'),
         ];
     }
+
+    public function present(): string
+    {
+        return Status::values()[$this->value];
+    }
 }

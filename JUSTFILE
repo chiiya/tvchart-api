@@ -66,7 +66,7 @@ down:
 
 # [DDEV] Launch PHPMyAdmin
 @db:
-	ddev launch -p
+	ddev phpmyadmin
 
 # [DDEV] List application commands
 @list:

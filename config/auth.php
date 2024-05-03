@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use App\Models\User;
+use Chiiya\FilamentAccessControl\Models\FilamentUser;
 
 return [
     /*
@@ -63,7 +64,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => User::class,
+            'model' => FilamentUser::class,
         ],
     ],
 

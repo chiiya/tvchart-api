@@ -83,6 +83,7 @@ class TvShow extends Model
         'locked_fields' => 'array',
         'status' => Status::class,
         'flagged_for_review' => 'boolean',
+        'trakt_members' => 'integer',
     ];
 
     /** {@inheritDoc} */
