@@ -37,7 +37,11 @@ class UpdateStatus
             $status = $heuristic->apply($data->show);
 
             if ($status instanceof Status) {
-                $data->show->update(['status' => $status]);
+                $data->show->update([
+                    'status' => $status,
+                    'blacklist_reason' => $heuristic->reason(),
+                    'status_updated_at' => now(),
+                ]);
                 break;
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Heuristics;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\Network;
 use App\Domain\Models\TvShow;
@@ -29,5 +30,10 @@ class PopularShow implements HeuristicInterface
         activity()->on($show)->log('Whitelisted due to popularity.');
 
         return Status::WHITELISTED;
+    }
+
+    public function reason(): ?BlacklistReason
+    {
+        return null;
     }
 }

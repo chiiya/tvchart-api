@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use App\V1\Http\Controllers\SeasonController;
+use App\V1\Http\Controllers\StatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,6 @@ Route::get('/shows/{year}/{season}', [SeasonController::class, 'index'])
     ->where('year', '20[2-3]\d')
     ->where('month', '(^0?[1-9]$)|(^1[0-2]$)')
     ->name('seasons.index');
+
+Route::get('/stats/monthly', [StatsController::class, 'monthly'])
+    ->name('stats.monthly');

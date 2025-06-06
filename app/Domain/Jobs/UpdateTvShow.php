@@ -8,12 +8,15 @@ use App\Domain\Exceptions\InsufficientDataException;
 use App\Domain\Exceptions\ShowIsAdultException;
 use App\Domain\Models\TvShow;
 use App\Domain\Pipelines\UpdateTvShowPipeline;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class UpdateTvShow implements ShouldQueue
 {
@@ -35,11 +38,15 @@ class UpdateTvShow implements ShouldQueue
             UpdateTvShowPipeline::run(new UpdateTvShowData(id: $this->id, show: new TvShow));
         } catch (EntityDeletedException | InsufficientDataException | ShowIsAdultException) {
             // Skip this show
+        } catch (Exception $exception) {
+            Log::error('Failed to update show', ['id' => $this->id, 'exception' => $exception]);
+
+            throw $exception;
         }
     }
-
-    public function middleware(): array
-    {
-        return [new RateLimitedWithRedis('tmdb')];
-    }
+//
+//    public function middleware(): array
+//    {
+//        return [new RateLimitedWithRedis('tmdb')];
+//    }
 }

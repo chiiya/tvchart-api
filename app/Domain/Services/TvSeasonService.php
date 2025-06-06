@@ -9,16 +9,16 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Collection;
 use Sokil\IsoCodes\IsoCodesFactory;
 
-class TvSeasonService
+readonly class TvSeasonService
 {
     public function __construct(
-        private readonly Repository $cache,
+        private Repository $cache,
     ) {}
 
     public function getShowsForMonth(int $year, int $month): Collection
     {
         return $this->cache->remember("shows-{$year}-{$month}", now()->addDay(), function () use ($year, $month) {
-            $start = CarbonImmutable::create($year, $month)->startOfMonth();
+            $start = CarbonImmutable::createFromDate($year, $month, 1)->startOfMonth();
             $end = $start->endOfMonth();
             $iso = new IsoCodesFactory;
             $languages = $iso->getLanguages();
@@ -73,6 +73,30 @@ class TvSeasonService
                     ->values()
                     ->all(),
             ]);
+        });
+    }
+
+    public function countByMonth(): array
+    {
+        return $this->cache->remember('shows-count-by-month', now()->addDay(), function () {
+            $start = config('tv-chart.archive_start');
+            $end = now()->endOfMonth();
+            $shows = TvSeason::query()
+                ->join('tv_shows', 'tv_seasons.tv_show_id', '=', 'tv_shows.tmdb_id')
+                ->where('tv_seasons.number', '>', 0)
+                ->where('tv_shows.status', '=', Status::WHITELISTED)
+                ->where('tv_seasons.first_air_date', '>=', $start)
+                ->where('tv_seasons.first_air_date', '<=', $end)
+                ->groupByRaw('month')
+                ->selectRaw("date_trunc('month', tv_seasons.first_air_date) as month, COUNT(*) as count")
+                ->orderByDesc('month')
+                ->get();
+
+            return $shows->map(fn ($show) => [
+                'year' => (int) substr($show->month, 0, 4),
+                'month' => (int) substr($show->month, 5, 2),
+                'shows' => (int) $show->count,
+            ])->groupBy('year')->all();
         });
     }
 }

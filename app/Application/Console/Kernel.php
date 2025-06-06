@@ -37,9 +37,9 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateCompanies::class)->dailyAt('09:00');
         $schedule->command(UpdateNetworks::class)->dailyAt('09:00');
         $schedule->command(ImportChanges::class)->dailyAt('09:15');
-        $schedule->command(UpdateImdbData::class)->dailyAt('12:00');
-        $schedule->command(UpdateTraktMembers::class)->dailyAt('12:15');
-        $schedule->command(FlagShowsForReview::class)->dailyAt('14:00');
+        $schedule->command(UpdateImdbData::class)->dailyAt('15:00');
+        $schedule->command(UpdateTraktMembers::class)->dailyAt('15:15');
+        $schedule->command(FlagShowsForReview::class)->dailyAt('16:00');
         $schedule->command(RequeueUndecidedShows::class)->weekly();
     }
 

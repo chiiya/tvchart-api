@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\TvShowResource\Pages;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
 use App\Filament\Resources\TvShowResource;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,19 +21,28 @@ class ShowTvShow extends ViewRecord
 {
     protected static string $resource = TvShowResource::class;
 
-    public function whitelist(): void
+    public function whitelist(): null|Redirector|RedirectResponse
     {
         $this->record->update([
             'status' => Status::WHITELISTED,
             'flagged_for_review' => false,
+            'status_updated_at' => now(),
         ]);
         Notification::make()->title('Record whitelisted successfully.')->success()->send();
+
+        return $this->nextUnreviewedRecord();
     }
 
-    public function blacklist(): void
+    public function blacklist(BlacklistReason $reason): null|Redirector|RedirectResponse
     {
-        $this->record->update(['status' => Status::BLACKLISTED]);
+        $this->record->update([
+            'status' => Status::BLACKLISTED,
+            'blacklist_reason' => $reason,
+            'status_updated_at' => now(),
+        ]);
         Notification::make()->title('Record blacklisted successfully.')->success()->send();
+
+        return $this->nextUnreviewedRecord();
     }
 
     public function blacklistFinal(): void
@@ -39,6 +50,7 @@ class ShowTvShow extends ViewRecord
         $this->record->update([
             'status' => Status::BLACKLISTED_FINAL,
             'flagged_for_review' => false,
+            'status_updated_at' => now(),
         ]);
         Notification::make()->title('Record blacklisted successfully.')->success()->send();
     }
@@ -48,6 +60,7 @@ class ShowTvShow extends ViewRecord
         $this->record->update([
             'status' => Status::UNDECIDED,
             'flagged_for_review' => false,
+            'status_updated_at' => now(),
         ]);
         Notification::make()->title('Record updated successfully.')->success()->send();
     }
@@ -63,6 +76,7 @@ class ShowTvShow extends ViewRecord
             ->whereNotNull('poster')
             ->whereNotNull('overview')
             ->whereNotNull('first_air_date')
+            ->where('first_air_date', '<', now()->addMonths(2))
             ->orderByDesc('first_air_date')
             ->select(['tmdb_id'])
             ->first();
@@ -82,18 +96,34 @@ class ShowTvShow extends ViewRecord
             Action::make('undecided')
                 ->action('undecided')
                 ->color('warning')
+                ->icon('heroicon-m-question-mark-circle')
                 ->label(__('Undecided')),
             Action::make('whitelist')
                 ->action('whitelist')
                 ->color('success')
+                ->icon('heroicon-m-check-circle')
                 ->label(__('Whitelist')),
-            Action::make('blacklist')
-                ->action('blacklist')
+            ActionGroup::make([
+                Action::make('blacklistUnavailable')
+                    ->label(BlacklistReason::UNAVAILABLE->present())
+                    ->action(fn () => $this->blacklist(BlacklistReason::UNAVAILABLE)),
+                Action::make('blacklistInappropriate')
+                    ->label(BlacklistReason::INAPPROPRIATE->present())
+                    ->action(fn () => $this->blacklist(BlacklistReason::INAPPROPRIATE)),
+                Action::make('blacklistGenre')
+                    ->label(BlacklistReason::GENRE->present())
+                    ->action(fn () => $this->blacklist(BlacklistReason::GENRE)),
+                Action::make('blacklistNetwork')
+                    ->label(BlacklistReason::NETWORK->present())
+                    ->action(fn () => $this->blacklist(BlacklistReason::NETWORK)),
+            ])
+                ->icon('heroicon-m-x-circle')
+                ->label(__('Blacklist'))
                 ->color('danger')
+                ->button()
                 ->visible(
                     fn () => ! $this->record->flagged_for_review && $this->record->status !== Status::BLACKLISTED_FINAL,
-                )
-                ->label(__('Blacklist')),
+                ),
             Action::make('blacklistFinal')
                 ->action('blacklistFinal')
                 ->color('danger')

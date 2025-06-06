@@ -2,6 +2,7 @@
 
 namespace App\Application\Providers;
 
+use Chiiya\FilamentAccessControl\Models\FilamentUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Horizon\Horizon;
@@ -26,7 +27,16 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     {
         Gate::define(
             'viewHorizon',
-            fn () => Auth::guard('filament')->check() && Auth::guard('filament')->user()?->can('horizon.view'),
+            function (?FilamentUser $user) {
+                if (! Auth::guard('filament')->check()) {
+                    return false;
+                }
+
+                auth()->shouldUse('filament');
+                $user = Auth::guard('filament')->user();
+
+                return $user->can('horizon.view');
+            },
         );
     }
 }

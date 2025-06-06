@@ -6,6 +6,7 @@ use App\Domain\Clients\TraktClient;
 use App\Domain\DTOs\UpdateTvShowData;
 use Closure;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Log;
 
 class FetchShowFromTrakt
 {
@@ -31,6 +32,8 @@ class FetchShowFromTrakt
             if ($exception->response->status() === 404) {
                 return $next($data);
             }
+
+            Log::error('Trakt Exception', ['id' => $data->id, 'exception' => $exception]);
 
             throw $exception;
         }

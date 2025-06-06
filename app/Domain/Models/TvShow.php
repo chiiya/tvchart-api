@@ -2,6 +2,7 @@
 
 namespace App\Domain\Models;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Presenters\TvShowPresenter;
 use Carbon\CarbonImmutable;
@@ -33,14 +34,14 @@ use Illuminate\Support\Carbon;
  * @property float $imdb_score
  * @property int $imdb_votes
  * @property int $trakt_members
- * @property float|null $popularity
  * @property string|null $imdb_id
  * @property int|null $tvdb_id
- * @property array|null $locked_fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Status $status
  * @property bool $flagged_for_review
+ * @property Carbon|null $status_updated_at
+ * @property BlacklistReason|null $blacklist_reason
  * @property Collection|Company[] $companies
  * @property int|null $companies_count
  * @property Collection|Country[] $countries
@@ -79,11 +80,12 @@ class TvShow extends Model
     /** {@inheritDoc} */
     protected $casts = [
         'first_air_date' => 'immutable_date',
+        'status_updated_at' => 'immutable_date',
         'imdb_score' => 'float',
-        'locked_fields' => 'array',
         'status' => Status::class,
         'flagged_for_review' => 'boolean',
         'trakt_members' => 'integer',
+        'blacklist_reason' => BlacklistReason::class,
     ];
 
     /** {@inheritDoc} */

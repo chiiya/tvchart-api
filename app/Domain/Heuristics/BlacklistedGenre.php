@@ -2,6 +2,7 @@
 
 namespace App\Domain\Heuristics;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
 
@@ -24,7 +25,7 @@ class BlacklistedGenre implements HeuristicInterface
             return Status::BLACKLISTED_FINAL;
         }
 
-        // Some genres are blacklisted entirely
+        // None of the blacklisted genres are present
         if (! count(array_intersect($blacklistedGenres, $genres))) {
             return null;
         }
@@ -32,5 +33,10 @@ class BlacklistedGenre implements HeuristicInterface
         activity()->on($show)->log('Blacklisted due to genres.');
 
         return Status::BLACKLISTED_FINAL;
+    }
+
+    public function reason(): ?BlacklistReason
+    {
+        return BlacklistReason::GENRE;
     }
 }

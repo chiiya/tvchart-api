@@ -34,4 +34,14 @@ class Country extends Model
 
     /** {@inheritDoc} */
     protected $guarded = [];
+
+    /**
+     * Is the country whitelisted?
+     */
+    public function isWhitelisted(): bool
+    {
+        $countries = config('tv-chart.whitelist.countries');
+
+        return in_array($this->country_code, $countries, true);
+    }
 }

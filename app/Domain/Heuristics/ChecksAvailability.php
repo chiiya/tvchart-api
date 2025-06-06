@@ -40,7 +40,7 @@ trait ChecksAvailability
         $deWatchProviders = $show->watchProviders->where('pivot.region', '=', 'DE');
 
         // For these languages, there are niche streaming providers, we only care about the big ones
-        if (in_array($show->primary_language, ['zh', 'ko'], true)) {
+        if (in_array($show->primary_language, config('tv-chart.blacklist.languages'), true)) {
             return $this->isStreamingOnMajorProvider($usWatchProviders)
                 || $this->isStreamingOnMajorProvider($deWatchProviders);
         }

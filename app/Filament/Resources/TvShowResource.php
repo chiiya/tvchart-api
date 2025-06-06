@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
+use App\Domain\Models\Country;
 use App\Domain\Models\Language;
 use App\Domain\Models\Network;
 use App\Domain\Models\TvShow;
@@ -11,6 +13,8 @@ use App\Filament\Resources\TvShowResource\Pages\ListTvShows;
 use App\Filament\Resources\TvShowResource\Pages\ShowTvShow;
 use App\Filament\Resources\TvShowResource\RelationManagers\TvSeasonsRelationManager;
 use Carbon\CarbonImmutable;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\Grid as InfolistGrid;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Section as InfolistSection;
@@ -19,6 +23,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -62,6 +67,47 @@ class TvShowResource extends Resource
                 Filter::make('flagged_for_review')
                     ->label(__('Flagged for Review'))
                     ->query(fn (Builder $query): Builder => $query->where('flagged_for_review', '=', true)),
+                Filter::make('first_air_date')
+                    ->form([
+                        Fieldset::make()
+                            ->columns(1)
+                            ->schema([
+                                Select::make('month')
+                                    ->label(__('Month'))
+                                    ->options([
+                                        1 => 'January',
+                                        2 => 'February',
+                                        3 => 'March',
+                                        4 => 'April',
+                                        5 => 'May',
+                                        6 => 'June',
+                                        7 => 'July',
+                                        8 => 'August',
+                                        9 => 'September',
+                                        10 => 'October',
+                                        11 => 'November',
+                                        12 => 'December',
+                                    ])
+                                    ->required(),
+                                Select::make('year')
+                                    ->label(__('Year'))
+                                    ->options(
+                                        array_combine(
+                                            range(now()->year, 2020),
+                                            range(now()->year, 2020),
+                                        ),
+                                    )
+                                    ->required()
+                            ])
+                    ])
+                    ->query(fn (Builder $query, array $data): Builder => $query
+                        ->when($data['month'] && $data['year'], fn (Builder $query) => $query
+                            ->whereHas('seasons', fn (Builder $query) => $query
+                                ->where('first_air_date', '>=', CarbonImmutable::createFromDate($data['year'], $data['month'])->startOfMonth())
+                                ->where('first_air_date', '<=', CarbonImmutable::createFromDate($data['year'], $data['month'])->endOfMonth())
+                            )
+                        ),
+                    )
             ])
             ->actions([ViewAction::make()]);
     }
@@ -70,9 +116,23 @@ class TvShowResource extends Resource
     {
         return $infolist
             ->schema([
-                Split::make([
-                    InfolistGrid::make(1)->schema([
-                        InfolistSection::make(__('Details'))->schema([
+                InfolistGrid::make([
+                    'default' => 1,
+                    'md' => 3,
+                ])->schema([
+                    InfolistSection::make()
+                        ->heading(__('Details'))
+                        ->schema([
+                            TextEntry::make('name')
+                                ->label(__('Name'))
+                                ->size(TextEntry\TextEntrySize::Large)
+                                ->weight(FontWeight::Bold)
+                                ->color('primary')
+                                ->getStateUsing(
+                                    fn (TvShow $record) => new HtmlString(
+                                        $record->name.($record->original_name !== '' && $record->original_name !== '0' && $record->original_name !== $record->name ? ' (<em>'.$record->original_name.'</em>)' : ''),
+                                    ),
+                                ),
                             TextEntry::make('status')
                                 ->label(__('Status'))
                                 ->badge()
@@ -88,26 +148,23 @@ class TvShowResource extends Resource
                                 ->formatStateUsing(fn (?CarbonImmutable $state) => $state?->format('Y-m-d'))
                                 ->color(
                                     fn (?CarbonImmutable $state) => $state?->gte(
-                                        now()->subMonth()->startOfMonth(),
+                                        now()->subMonths(2)->startOfMonth(),
                                     ) ? 'warning' : null,
                                 )
                                 ->weight(
                                     fn (?CarbonImmutable $state) => $state?->gte(
-                                        now()->subMonth()->startOfMonth(),
+                                        now()->subMonths(2)->startOfMonth(),
                                     ) ? FontWeight::Bold : null,
                                 )
                                 ->icon(
                                     fn (?CarbonImmutable $state) => $state?->gte(
-                                        now()->subMonth()->startOfMonth(),
-                                    ) ? 'heroicon-m-exclamation' : null,
-                                ),
-                            TextEntry::make('name')
-                                ->label(__('Name'))
-                                ->getStateUsing(
-                                    fn (TvShow $record) => new HtmlString(
-                                        $record->name.($record->original_name !== '' && $record->original_name !== '0' ? ' (<em>'.$record->original_name.'</em>)' : ''),
-                                    ),
-                                ),
+                                        now()->subMonths(2)->startOfMonth(),
+                                    ) ? 'heroicon-m-exclamation-triangle' : null,
+                                )
+                                ->iconColor('warning'),
+                            TextEntry::make('blacklist_reason')
+                                ->label(__('Blacklist Reason'))
+                                ->formatStateUsing(fn (BlacklistReason $state) => $state->present()),
                             TextEntry::make('type')->label(__('Type')),
                             TextEntry::make('languages')
                                 ->label(__('Languages'))
@@ -116,10 +173,13 @@ class TvShowResource extends Resource
                                 ->color(
                                     fn (Language $state, TvShow $record) => $state->language_code === $record->primary_language ? 'primary' : 'gray',
                                 ),
-                            TextEntry::make('countries.name')
+                            TextEntry::make('countries')
                                 ->label(__('Countries'))
                                 ->badge()
-                                ->color('gray'),
+                                ->formatStateUsing(fn (Country $state) => $state->name)
+                                ->color(
+                                    fn (Country $state, TvShow $record) => $state->isWhitelisted() ? 'success' : 'gray',
+                                ),
                             TextEntry::make('genres.name')
                                 ->label(__('Genres'))
                                 ->badge()
@@ -143,9 +203,9 @@ class TvShowResource extends Resource
                                 ->label(__('IMDB'))
                                 ->formatStateUsing(
                                     fn (TvShow $record) => $record->imdb_id ? number_format(
-                                        $record->imdb_score,
-                                        2,
-                                    ).' | '.$record->imdb_votes.'  votes' : '–',
+                                            $record->imdb_score,
+                                            2,
+                                        ).' | '.$record->imdb_votes.'  votes' : '–',
                                 )
                                 ->url(
                                     fn (TvShow $record) => $record->imdb_id ? 'https://www.imdb.com/title/'.$record->imdb_id.'/' : null,
@@ -157,8 +217,8 @@ class TvShowResource extends Resource
                                     $state < 100 => 'danger',
                                     default => null,
                                 }),
-                        ])->grow(),
-                    ])->grow(),
+                        ])
+                        ->columnSpan(2),
                     InfolistSection::make([
                         ImageEntry::make('poster')
                             ->hiddenLabel()
@@ -166,10 +226,15 @@ class TvShowResource extends Resource
                                 fn (TvShow $record) => $record->poster ? $record->present()->poster() : null,
                             )
                             ->checkFileExistence(false)
-                            ->height('auto')
-                            ->width(400),
-                    ])->grow(false),
-                ])->from('md'),
+                            ->view('filament.image'),
+                        TextEntry::make('created_at')
+                            ->label(__('Created At'))
+                            ->date(),
+                        TextEntry::make('updated_at')
+                            ->label(__('Updated At'))
+                            ->date(),
+                    ])->columnSpan(1),
+                ]),
                 InfolistSection::make(__('Streaming'))->schema([
                     TextEntry::make('us_watch_providers')
                         ->label(__('US'))

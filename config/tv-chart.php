@@ -160,9 +160,9 @@ return [
             '/^Amazon$/',
             '/^Prime Video/',
             '/^Hulu$/',
-            '/^Apple TV+$/',
-            '/^Disney+$/',
-            '/^Paramount+$/',
+            '/^Apple TV\+$/',
+            '/^Disney\+$/',
+            '/^Paramount\+$/',
             '/^Peacock$/',
             '/^BBC One$/',
             '/^Syfy$/',
@@ -183,6 +183,7 @@ return [
             'Sky Go',
             'Peacock',
         ],
+        'countries' => ['US', 'GB']
     ],
 
     /*
@@ -197,7 +198,7 @@ return [
         'genres' => ['Anime', 'Kids', 'News', 'Reality', 'Soap', 'Sport'],
         'networks' => ['Investigation Discovery', 'Oxygen', 'Disney Junior', 'Disney XD', 'Disney Channel'],
         // Not truly blacklisted, but only included when available on an international network
-        'languages' => ['hi', 'te', 'zh', 'cn', 'th', 'ar', 'tr', 'tl'],
+        'languages' => ['hi', 'te', 'zh', 'cn', 'th', 'ar', 'tr', 'tl', 'ja', 'ru'],
     ],
 
     /*
@@ -214,4 +215,6 @@ return [
     'countries' => [
         'KR' => 'South Korea',
     ],
+
+    'archive_start' => '2022-01-01',
 ];

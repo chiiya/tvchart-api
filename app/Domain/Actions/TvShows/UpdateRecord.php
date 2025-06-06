@@ -44,7 +44,6 @@ class UpdateRecord
             'release_year',
             'overview',
             'type',
-            'popularity',
         ]);
     }
 

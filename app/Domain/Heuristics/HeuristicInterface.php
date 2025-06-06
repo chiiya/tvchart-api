@@ -2,10 +2,12 @@
 
 namespace App\Domain\Heuristics;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
 
 interface HeuristicInterface
 {
     public function apply(TvShow $show): ?Status;
+    public function reason(): ?BlacklistReason;
 }

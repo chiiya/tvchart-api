@@ -2,6 +2,7 @@
 
 namespace App\Domain\Heuristics;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
 
@@ -22,5 +23,10 @@ class BlacklistedNetwork implements HeuristicInterface
         activity()->on($show)->log('Blacklisted due to network.');
 
         return Status::BLACKLISTED;
+    }
+
+    public function reason(): ?BlacklistReason
+    {
+        return BlacklistReason::NETWORK;
     }
 }

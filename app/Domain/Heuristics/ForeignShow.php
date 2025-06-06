@@ -2,6 +2,7 @@
 
 namespace App\Domain\Heuristics;
 
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
 use Carbon\CarbonImmutable;
@@ -22,6 +23,10 @@ class ForeignShow implements HeuristicInterface
             return null;
         }
 
+        if ($this->isAvailableInternationally($show)) {
+            return null;
+        }
+
         if (in_array(
             $show->primary_language,
             config('tv-chart.blacklist.languages'),
@@ -35,12 +40,13 @@ class ForeignShow implements HeuristicInterface
             return null;
         }
 
-        if ($this->isAvailableInternationally($show)) {
-            return null;
-        }
-
         activity()->on($show)->log('Blacklisted due to missing international availability.');
 
         return Status::BLACKLISTED;
+    }
+
+    public function reason(): ?BlacklistReason
+    {
+        return BlacklistReason::UNAVAILABLE;
     }
 }

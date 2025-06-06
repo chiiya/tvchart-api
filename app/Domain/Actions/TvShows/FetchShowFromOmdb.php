@@ -7,6 +7,7 @@ use App\Domain\DTOs\UpdateTvShowData;
 use Closure;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class FetchShowFromOmdb
 {
@@ -31,6 +32,8 @@ class FetchShowFromOmdb
             if ($exception->response->status() === 404) {
                 return $next($data);
             }
+
+            Log::error('OMDB Exception', ['id' => $data->id, 'exception' => $exception]);
 
             throw $exception;
         }

@@ -12,6 +12,7 @@ use Chiiya\Tmdb\Repositories\TvShowRepository;
 use Closure;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class FetchShowFromTmdb
 {
@@ -45,6 +46,8 @@ class FetchShowFromTmdb
 
                 throw new EntityDeletedException;
             }
+
+            Log::error('TMDB Exception', ['id' => $data->id, 'exception' => $exception]);
 
             throw $exception;
         }
