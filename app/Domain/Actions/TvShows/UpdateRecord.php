@@ -8,13 +8,17 @@ use Chiiya\Tmdb\Entities\Television\TvShowDetails;
 use Closure;
 use Illuminate\Support\Arr;
 
-class UpdateRecord
+readonly class UpdateRecord
 {
     /**
      * Update our tv show record in database.
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
+        if (! $data->tmdb instanceof TvShowDetails) {
+            return $next($data);
+        }
+
         if (! $data->show->exists) {
             $data->show->fill([
                 'tmdb_id' => $data->id,
@@ -37,7 +41,7 @@ class UpdateRecord
      */
     private function getBaseAttributes(TvShowDetails $data): array
     {
-        return Arr::only($data->toArray(), [
+        return Arr::only($data->encode(), [
             'name',
             'original_name',
             'first_air_date',
@@ -59,8 +63,8 @@ class UpdateRecord
             'production_status' => ProductionStatus::fromResponse($data->status),
             'primary_language' => $data->original_language,
             'content_rating' => collect($data->content_ratings)->firstWhere('country', '=', 'US')?->rating,
-            'imdb_id' => $data->external_ids->imdb_id,
-            'tvdb_id' => $data->external_ids->tvdb_id,
+            'imdb_id' => $data->external_ids?->imdb_id,
+            'tvdb_id' => $data->external_ids?->tvdb_id,
         ];
     }
 }

@@ -20,14 +20,14 @@ use Illuminate\Support\Carbon;
  * @property string|null $still
  * @property int $tv_season_id
  * @property int|null $tvdb_id
- * @property array|null $locked_fields
+ * @property array<array-key, mixed>|null $locked_fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property TvSeason $show
  *
- * @method static Builder|TvEpisode newModelQuery()
- * @method static Builder|TvEpisode newQuery()
- * @method static Builder|TvEpisode query()
+ * @method static Builder<static>|TvEpisode newModelQuery()
+ * @method static Builder<static>|TvEpisode newQuery()
+ * @method static Builder<static>|TvEpisode query()
  *
  * @mixin \Eloquent
  */
@@ -49,7 +49,7 @@ class TvEpisode extends Model
     /**
      * One-To-Many: One TV episode belongs to one TV season.
      *
-     * @return BelongsTo<TvSeason, TvEpisode>
+     * @return BelongsTo<TvSeason, $this>
      */
     public function show(): BelongsTo
     {

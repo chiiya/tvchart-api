@@ -7,7 +7,7 @@ use App\Domain\DTOs\UpdateTvSeasonData;
 use Closure;
 use Illuminate\Http\Client\RequestException;
 
-class FetchSeasonFromTrakt
+readonly class FetchSeasonFromTrakt
 {
     public function __construct(
         private TraktClient $client,

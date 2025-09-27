@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $language_code
  * @property string $name
  *
- * @method static Builder|Language newModelQuery()
- * @method static Builder|Language newQuery()
- * @method static Builder|Language query()
+ * @method static Builder<static>|Language newModelQuery()
+ * @method static Builder<static>|Language newQuery()
+ * @method static Builder<static>|Language query()
  *
  * @mixin \Eloquent
  */

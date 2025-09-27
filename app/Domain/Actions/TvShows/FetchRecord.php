@@ -7,7 +7,7 @@ use App\Domain\Models\TvShow;
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class FetchRecord
+readonly class FetchRecord
 {
     /**
      * Fetch existing tv show record from database or create a new one.

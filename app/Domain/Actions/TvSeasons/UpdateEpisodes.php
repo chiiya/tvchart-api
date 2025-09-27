@@ -10,13 +10,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class UpdateEpisodes
+readonly class UpdateEpisodes
 {
     /**
      * Update our tv episode records in database.
      */
     public function handle(UpdateTvSeasonData $data, Closure $next): mixed
     {
+        if (! $data->tmdb instanceof TvSeasonDetails) {
+            return $next($data);
+        }
+
         $this->deleteMissingEpisodes($data->tmdb);
 
         foreach ($data->tmdb->episodes as $attributes) {

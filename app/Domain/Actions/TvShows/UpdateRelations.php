@@ -4,14 +4,15 @@ namespace App\Domain\Actions\TvShows;
 
 use App\Domain\DTOs\UpdateTvShowData;
 use App\Domain\Services\CachingService;
+use Chiiya\Tmdb\Entities\Television\TvShowDetails;
 use Chiiya\Tmdb\Entities\WatchProviders\WatchProviderList;
 use Closure;
 use Illuminate\Support\Collection;
 
-class UpdateRelations
+readonly class UpdateRelations
 {
     public function __construct(
-        private readonly CachingService $cache,
+        private CachingService $cache,
     ) {}
 
     /**
@@ -19,6 +20,10 @@ class UpdateRelations
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
+        if (! $data->tmdb instanceof TvShowDetails) {
+            return $next($data);
+        }
+
         $genres = array_intersect_key($this->cache->getGenres(), array_flip($data->genres));
         $data->show->genres()->sync($genres);
         $data->show->networks()->sync(collect($data->tmdb->networks)->pluck('id')->all());
@@ -54,6 +59,8 @@ class UpdateRelations
 
     /**
      * Get a unique list of watch provider IDs across all channels (streaming, renting, buying).
+     *
+     * @return Collection<int, int>
      */
     private function getProviderIds(WatchProviderList $list): Collection
     {

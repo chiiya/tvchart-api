@@ -6,7 +6,7 @@ use App\Domain\DTOs\TmdbExport;
 use Closure;
 use Illuminate\Support\Facades\DB;
 
-class DeleteMissingEntries
+readonly class DeleteMissingEntries
 {
     /**
      * Delete all entries no longer present in the new export.

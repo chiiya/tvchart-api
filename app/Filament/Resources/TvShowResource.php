@@ -12,19 +12,19 @@ use App\Domain\Models\WatchProvider;
 use App\Filament\Resources\TvShowResource\Pages\ListTvShows;
 use App\Filament\Resources\TvShowResource\Pages\ShowTvShow;
 use App\Filament\Resources\TvShowResource\RelationManagers\TvSeasonsRelationManager;
+use BackedEnum;
 use Carbon\CarbonImmutable;
-use Filament\Forms\Components\Fieldset;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
-use Filament\Infolists\Components\Grid as InfolistGrid;
 use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\Section as InfolistSection;
-use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Support\Enums\TextSize;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -36,7 +36,7 @@ use Illuminate\Support\Str;
 class TvShowResource extends Resource
 {
     protected static ?string $model = TvShow::class;
-    protected static ?string $navigationIcon = 'heroicon-o-film';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-film';
     protected static ?string $navigationLabel = 'TV Shows';
 
     public static function table(Table $table): Table
@@ -68,7 +68,7 @@ class TvShowResource extends Resource
                     ->label(__('Flagged for Review'))
                     ->query(fn (Builder $query): Builder => $query->where('flagged_for_review', '=', true)),
                 Filter::make('first_air_date')
-                    ->form([
+                    ->schema([
                         Fieldset::make()
                             ->columns(1)
                             ->schema([
@@ -91,41 +91,55 @@ class TvShowResource extends Resource
                                     ->required(),
                                 Select::make('year')
                                     ->label(__('Year'))
-                                    ->options(
-                                        array_combine(
-                                            range(now()->year, 2020),
-                                            range(now()->year, 2020),
-                                        ),
-                                    )
-                                    ->required()
-                            ])
+                                    ->options(array_combine(range(now()->year, 2020), range(now()->year, 2020)))
+                                    ->required(),
+                            ]),
                     ])
-                    ->query(fn (Builder $query, array $data): Builder => $query
-                        ->when($data['month'] && $data['year'], fn (Builder $query) => $query
-                            ->whereHas('seasons', fn (Builder $query) => $query
-                                ->where('first_air_date', '>=', CarbonImmutable::createFromDate($data['year'], $data['month'])->startOfMonth())
-                                ->where('first_air_date', '<=', CarbonImmutable::createFromDate($data['year'], $data['month'])->endOfMonth())
-                            )
-                        ),
-                    )
+                    ->query(
+                        fn (Builder $query, array $data): Builder => $query
+                            ->when(
+                                $data['month'] && $data['year'],
+                                fn (Builder $query) => $query
+                                    ->whereHas(
+                                        'seasons',
+                                        fn (Builder $query) => $query
+                                            ->where(
+                                                'first_air_date',
+                                                '>=',
+                                                CarbonImmutable::createFromDate(
+                                                    $data['year'],
+                                                    $data['month'],
+                                                )->startOfMonth(),
+                                            )
+                                            ->where(
+                                                'first_air_date',
+                                                '<=',
+                                                CarbonImmutable::createFromDate(
+                                                    $data['year'],
+                                                    $data['month'],
+                                                )->endOfMonth(),
+                                            ),
+                                    ),
+                            ),
+                    ),
             ])
-            ->actions([ViewAction::make()]);
+            ->recordActions([ViewAction::make()]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
-                InfolistGrid::make([
+        return $schema
+            ->components([
+                Grid::make([
                     'default' => 1,
                     'md' => 3,
                 ])->schema([
-                    InfolistSection::make()
+                    Section::make()
                         ->heading(__('Details'))
                         ->schema([
                             TextEntry::make('name')
                                 ->label(__('Name'))
-                                ->size(TextEntry\TextEntrySize::Large)
+                                ->size(TextSize::Large)
                                 ->weight(FontWeight::Bold)
                                 ->color('primary')
                                 ->getStateUsing(
@@ -203,9 +217,9 @@ class TvShowResource extends Resource
                                 ->label(__('IMDB'))
                                 ->formatStateUsing(
                                     fn (TvShow $record) => $record->imdb_id ? number_format(
-                                            $record->imdb_score,
-                                            2,
-                                        ).' | '.$record->imdb_votes.'  votes' : '–',
+                                        $record->imdb_score,
+                                        2,
+                                    ).' | '.$record->imdb_votes.'  votes' : '–',
                                 )
                                 ->url(
                                     fn (TvShow $record) => $record->imdb_id ? 'https://www.imdb.com/title/'.$record->imdb_id.'/' : null,
@@ -219,7 +233,7 @@ class TvShowResource extends Resource
                                 }),
                         ])
                         ->columnSpan(2),
-                    InfolistSection::make([
+                    Section::make([
                         ImageEntry::make('poster')
                             ->hiddenLabel()
                             ->getStateUsing(
@@ -235,7 +249,7 @@ class TvShowResource extends Resource
                             ->date(),
                     ])->columnSpan(1),
                 ]),
-                InfolistSection::make(__('Streaming'))->schema([
+                Section::make(__('Streaming'))->schema([
                     TextEntry::make('us_watch_providers')
                         ->label(__('US'))
                         ->badge()
@@ -257,7 +271,7 @@ class TvShowResource extends Resource
                             fn (WatchProvider $state, TvShow $record) => $state->isWhitelisted() ? 'success' : 'gray',
                         ),
                 ]),
-                InfolistSection::make(__('Overview'))->schema([
+                Section::make(__('Overview'))->schema([
                     TextEntry::make('tmdb_id')
                         ->label(__('ID'))
                         ->url(

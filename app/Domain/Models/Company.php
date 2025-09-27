@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $tmdb_id
  * @property string $name
  *
- * @method static Builder|Company newModelQuery()
- * @method static Builder|Company newQuery()
- * @method static Builder|Company query()
+ * @method static Builder<static>|Company newModelQuery()
+ * @method static Builder<static>|Company newQuery()
+ * @method static Builder<static>|Company query()
  *
  * @mixin \Eloquent
  */

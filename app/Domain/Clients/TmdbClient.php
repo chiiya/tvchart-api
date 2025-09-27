@@ -2,28 +2,28 @@
 
 namespace App\Domain\Clients;
 
-use App\Domain\DTOs\Season;
 use App\Domain\Jobs\UpdateTvShow;
+use Carbon\CarbonImmutable;
 use Chiiya\Tmdb\Repositories\BrowseRepository;
 use Chiiya\Tmdb\Repositories\ChangeRepository;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class TmdbClient
+readonly class TmdbClient
 {
     use DispatchesJobs;
 
     public function __construct(
-        private readonly BrowseRepository $browse,
-        private readonly ChangeRepository $changes,
+        private BrowseRepository $browse,
+        private ChangeRepository $changes,
     ) {}
 
     /**
      * Import all shows since the given $season.
      */
-    public function updateShowsSince(Season $season, int $page = 1): void
+    public function updateShowsSince(CarbonImmutable $start, int $page = 1): void
     {
         $response = $this->browse->discoverTV([
-            'air_date.gte' => $season->start->format('Y-m-d'),
+            'air_date.gte' => $start->format('Y-m-d'),
             'page' => $page,
         ]);
 
@@ -32,7 +32,7 @@ class TmdbClient
         }
 
         if ($response->page < $response->total_pages) {
-            $this->updateShowsSince($season, $page + 1);
+            $this->updateShowsSince($start, $page + 1);
         }
     }
 

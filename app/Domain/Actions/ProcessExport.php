@@ -9,11 +9,11 @@ use App\Domain\Strategies\ImportStrategy;
 use Chiiya\Common\Services\FileDownloader;
 use Closure;
 
-class ProcessExport
+readonly class ProcessExport
 {
     public function __construct(
-        private readonly FileDownloader $downloader,
-        private readonly ImportLogRepository $imports,
+        private FileDownloader $downloader,
+        private ImportLogRepository $imports,
     ) {}
 
     /**

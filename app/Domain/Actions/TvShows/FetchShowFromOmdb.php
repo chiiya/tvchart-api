@@ -5,20 +5,22 @@ namespace App\Domain\Actions\TvShows;
 use App\Domain\Clients\OmdbClient;
 use App\Domain\DTOs\UpdateTvShowData;
 use Closure;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
-class FetchShowFromOmdb
+readonly class FetchShowFromOmdb
 {
     public function __construct(
-        private readonly OmdbClient $client,
+        private OmdbClient $client,
     ) {}
 
     /**
      * Fetch TV show data from OMDB.
      *
      * @throws RequestException
+     * @throws ConnectionException
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
@@ -33,7 +35,10 @@ class FetchShowFromOmdb
                 return $next($data);
             }
 
-            Log::error('OMDB Exception', ['id' => $data->id, 'exception' => $exception]);
+            Log::error('OMDB Exception', [
+                'id' => $data->id,
+                'exception' => $exception,
+            ]);
 
             throw $exception;
         }

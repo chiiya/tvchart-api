@@ -31,11 +31,15 @@ class RequeueUndecidedShows extends Command
         $count = TvShow::query()
             ->where('status', '=', Status::UNDECIDED)
             ->where('first_air_date', '<=', now())
-            ->where(fn (Builder $builder) => $builder
-                ->whereNull('status_updated_at')
-                ->orWhere('status_updated_at', '<', now()->subDays(7))
+            ->where(
+                fn (Builder $builder) => $builder
+                    ->whereNull('status_updated_at')
+                    ->orWhere('status_updated_at', '<', now()->subDays(7)),
             )
-            ->update(['status' => Status::UNREVIEWED, 'status_updated_at' => now()]);
+            ->update([
+                'status' => Status::UNREVIEWED,
+                'status_updated_at' => now(),
+            ]);
 
         $this->comment("{$count} shows have been requeued.");
 

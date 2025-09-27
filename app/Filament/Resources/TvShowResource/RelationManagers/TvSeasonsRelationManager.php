@@ -18,11 +18,17 @@ class TvSeasonsRelationManager extends RelationManager
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->orderByDesc('number'))
             ->columns([
-                TextColumn::make('number'),
-                TextColumn::make('name'),
-                TextColumn::make('first_air_date')->date('Y-m-d'),
-                TextColumn::make('season')
-                    ->getStateUsing(fn (TvSeason $record) => $record->season_year.' - '.ucfirst($record->season ?? '')),
+                TextColumn::make('number')->label(__('Number')),
+                TextColumn::make('name')->label(__('Name')),
+                TextColumn::make('first_air_date')
+                    ->label(__('First Air Date'))
+                    ->date('Y-m-d'),
+                TextColumn::make('year')
+                    ->label(__('Year'))
+                    ->getStateUsing(fn (TvSeason $record) => $record->getYear()),
+                TextColumn::make('month')
+                    ->label(__('Month'))
+                    ->getStateUsing(fn (TvSeason $record) => $record->getMonthName()),
             ]);
     }
 }

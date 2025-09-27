@@ -12,7 +12,7 @@ use App\Domain\Heuristics\OldTvShow;
 use App\Domain\Heuristics\PopularShow;
 use Closure;
 
-class UpdateStatus
+readonly class UpdateStatus
 {
     /**
      * Update our tv show record in database.

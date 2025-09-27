@@ -9,5 +9,6 @@ use App\Domain\Models\TvShow;
 interface HeuristicInterface
 {
     public function apply(TvShow $show): ?Status;
+
     public function reason(): ?BlacklistReason;
 }

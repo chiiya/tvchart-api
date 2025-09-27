@@ -3,6 +3,7 @@
 namespace App\Domain\Strategies;
 
 use App\Domain\DTOs\TmdbExport;
+use Chiiya\Common\Entities\DownloadedFile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +23,11 @@ class DirectImportStrategy implements ImportStrategy
      */
     protected function processExport(TmdbExport $data): void
     {
+        if (! $data->file instanceof DownloadedFile) {
+            return;
+        }
+
+        /** @var resource $pointer */
         $pointer = gzopen($data->file->getPath(), 'r');
         $items = [];
 

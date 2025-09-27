@@ -9,10 +9,10 @@ use Chiiya\Tmdb\Repositories\TvSeasonRepository;
 use Closure;
 use Illuminate\Http\Client\RequestException;
 
-class FetchSeasonFromTmdb
+readonly class FetchSeasonFromTmdb
 {
     public function __construct(
-        private readonly TvSeasonRepository $tmdb,
+        private TvSeasonRepository $tmdb,
     ) {}
 
     /**

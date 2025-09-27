@@ -8,10 +8,10 @@ use Closure;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Log;
 
-class FetchShowFromTrakt
+readonly class FetchShowFromTrakt
 {
     public function __construct(
-        private readonly TraktClient $client,
+        private TraktClient $client,
     ) {}
 
     /**
@@ -33,7 +33,10 @@ class FetchShowFromTrakt
                 return $next($data);
             }
 
-            Log::error('Trakt Exception', ['id' => $data->id, 'exception' => $exception]);
+            Log::error('Trakt Exception', [
+                'id' => $data->id,
+                'exception' => $exception,
+            ]);
 
             throw $exception;
         }

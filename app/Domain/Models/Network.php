@@ -16,9 +16,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static Builder|Network newModelQuery()
- * @method static Builder|Network newQuery()
- * @method static Builder|Network query()
+ * @method static Builder<static>|Network newModelQuery()
+ * @method static Builder<static>|Network newQuery()
+ * @method static Builder<static>|Network query()
  *
  * @mixin \Eloquent
  */

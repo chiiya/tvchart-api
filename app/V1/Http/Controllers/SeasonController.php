@@ -16,6 +16,6 @@ class SeasonController extends Controller
     {
         $shows = $this->service->getShowsForMonth((int) $year, (int) $month);
 
-        return response()->json(['data' => $shows->all()]);
+        return response()->json(['data' => $shows]);
     }
 }

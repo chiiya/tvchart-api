@@ -20,9 +20,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static Builder|ImportLog newModelQuery()
- * @method static Builder|ImportLog newQuery()
- * @method static Builder|ImportLog query()
+ * @method static Builder<static>|ImportLog newModelQuery()
+ * @method static Builder<static>|ImportLog newQuery()
+ * @method static Builder<static>|ImportLog query()
  *
  * @mixin \Eloquent
  */

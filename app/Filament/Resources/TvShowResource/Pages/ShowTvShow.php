@@ -21,7 +21,7 @@ class ShowTvShow extends ViewRecord
 {
     protected static string $resource = TvShowResource::class;
 
-    public function whitelist(): null|Redirector|RedirectResponse
+    public function whitelist(): Redirector|RedirectResponse|null
     {
         $this->record->update([
             'status' => Status::WHITELISTED,
@@ -33,7 +33,7 @@ class ShowTvShow extends ViewRecord
         return $this->nextUnreviewedRecord();
     }
 
-    public function blacklist(BlacklistReason $reason): null|Redirector|RedirectResponse
+    public function blacklist(BlacklistReason $reason): Redirector|RedirectResponse|null
     {
         $this->record->update([
             'status' => Status::BLACKLISTED,
@@ -65,7 +65,7 @@ class ShowTvShow extends ViewRecord
         Notification::make()->title('Record updated successfully.')->success()->send();
     }
 
-    public function nextUnreviewedRecord(): null|Redirector|RedirectResponse
+    public function nextUnreviewedRecord(): Redirector|RedirectResponse|null
     {
         $record = TvShow::query()
             ->where(

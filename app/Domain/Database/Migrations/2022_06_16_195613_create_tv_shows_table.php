@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('tv_shows', function (Blueprint $table): void {
@@ -18,7 +18,6 @@ return new class() extends Migration {
             $table->integer('release_year')->nullable()->index();
             $table->text('summary')->nullable();
             $table->text('overview')->nullable();
-            $table->string('homepage')->nullable();
             $table->string('production_status')->nullable();
             $table->string('type')->nullable();
             $table->string('primary_language')->nullable();
@@ -26,11 +25,15 @@ return new class() extends Migration {
             $table->decimal('imdb_score', 9, 2)->default(0);
             $table->bigInteger('imdb_votes')->unsigned()->default(0);
             $table->bigInteger('trakt_members')->default(0);
-            $table->float('popularity')->nullable();
             $table->string('imdb_id')->nullable()->index();
             $table->bigInteger('tvdb_id')->unsigned()->nullable()->index();
-            $table->json('locked_fields')->nullable();
+            $table->integer('status')->default(0);
+            $table->boolean('flagged_for_review')->default(false);
+            $table->dateTime('status_updated_at')->nullable();
+            $table->string('blacklist_reason')->nullable();
             $table->timestamps();
+
+            $table->index(['status']);
         });
     }
 

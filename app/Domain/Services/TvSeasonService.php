@@ -6,7 +6,6 @@ use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvSeason;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Support\Collection;
 use Sokil\IsoCodes\IsoCodesFactory;
 
 readonly class TvSeasonService
@@ -15,9 +14,9 @@ readonly class TvSeasonService
         private Repository $cache,
     ) {}
 
-    public function getShowsForMonth(int $year, int $month): Collection
+    public function getShowsForMonth(int $year, int $month): array
     {
-        return $this->cache->remember("shows-{$year}-{$month}", now()->addDay(), function () use ($year, $month) {
+        return $this->cache->remember("shows-{$year}-{$month}", now()->addHour(), function () use ($year, $month) {
             $start = CarbonImmutable::createFromDate($year, $month, 1)->startOfMonth();
             $end = $start->endOfMonth();
             $iso = new IsoCodesFactory;
@@ -59,9 +58,9 @@ readonly class TvSeasonService
                 'trakt_members' => $season->show->trakt_members,
                 'overview' => $season->overview ?? $season->show->overview,
                 'poster' => $season->poster ?? $season->show->poster,
-                'first_air_date' => $season->first_air_date->toIso8601String(),
+                'first_air_date' => $season->first_air_date?->toIso8601String(),
                 'primary_language' => $season->show->primary_language
-                    ? $languages->getByAlpha2($season->show->primary_language)->getName()
+                    ? $languages->getByAlpha2($season->show->primary_language)?->getName()
                     : null,
                 'episodes_count' => $season->episodes_count,
                 'genres' => $season->show->genres->pluck('name')->all(),
@@ -72,7 +71,7 @@ readonly class TvSeasonService
                     ->filter()
                     ->values()
                     ->all(),
-            ]);
+            ])->all();
         });
     }
 
@@ -93,8 +92,8 @@ readonly class TvSeasonService
                 ->get();
 
             return $shows->map(fn ($show) => [
-                'year' => (int) substr($show->month, 0, 4),
-                'month' => (int) substr($show->month, 5, 2),
+                'year' => (int) mb_substr($show->month, 0, 4),
+                'month' => (int) mb_substr($show->month, 5, 2),
                 'shows' => (int) $show->count,
             ])->groupBy('year')->all();
         });

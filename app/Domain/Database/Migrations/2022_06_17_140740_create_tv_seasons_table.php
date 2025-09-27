@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('tv_seasons', function (Blueprint $table): void {
@@ -18,12 +18,15 @@ return new class() extends Migration {
             $table->integer('release_year')->nullable()->index();
             $table->decimal('trakt_score', 9, 2)->default(0);
             $table->bigInteger('tvdb_id')->unsigned()->nullable()->index();
+            $table->string('season_year')->nullable();
+            $table->string('season')->nullable();
             $table->json('locked_fields')->nullable();
             $table->timestamps();
 
             $table->foreign('tv_show_id')->references('tmdb_id')->on('tv_shows')->cascadeOnDelete();
             $table->index(['number']);
             $table->index(['tv_show_id']);
+            $table->index(['season_year', 'season']);
         });
     }
 

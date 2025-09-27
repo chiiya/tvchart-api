@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  *
- * @method static Builder|Genre newModelQuery()
- * @method static Builder|Genre newQuery()
- * @method static Builder|Genre query()
+ * @method static Builder<static>|Genre newModelQuery()
+ * @method static Builder<static>|Genre newQuery()
+ * @method static Builder<static>|Genre query()
  *
  * @mixin \Eloquent
  */

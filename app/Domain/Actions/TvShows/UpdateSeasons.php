@@ -11,13 +11,17 @@ use Chiiya\Tmdb\Entities\Television\TvShowDetails;
 use Closure;
 use Illuminate\Support\Arr;
 
-class UpdateSeasons
+readonly class UpdateSeasons
 {
     /**
      * Update all tv seasons and episodes.
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
+        if (! $data->tmdb instanceof TvShowDetails) {
+            return $next($data);
+        }
+
         $this->deleteMissingSeasons($data->tmdb);
 
         foreach ($data->tmdb->seasons as $season) {

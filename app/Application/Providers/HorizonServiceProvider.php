@@ -27,12 +27,13 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     {
         Gate::define(
             'viewHorizon',
-            function (?FilamentUser $user) {
+            function () {
                 if (! Auth::guard('filament')->check()) {
                     return false;
                 }
 
                 auth()->shouldUse('filament');
+                /** @var FilamentUser $user */
                 $user = Auth::guard('filament')->user();
 
                 return $user->can('horizon.view');

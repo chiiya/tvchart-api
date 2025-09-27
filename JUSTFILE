@@ -3,7 +3,7 @@ PHPUNIT := 'vendor/bin/phpunit -d xdebug.max_nesting_level=250 -d memory_limit=1
 
 # [DDEV] Initial project setup
 setup:
-	cp .env.example .env
+	#cp .env.example .env
 	cd public && ln -s ../storage/app/public storage
 	ddev start
 	ddev composer install

@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $native_name
  *
- * @method static Builder|Country newModelQuery()
- * @method static Builder|Country newQuery()
- * @method static Builder|Country query()
+ * @method static Builder<static>|Country newModelQuery()
+ * @method static Builder<static>|Country newQuery()
+ * @method static Builder<static>|Country query()
  *
  * @mixin \Eloquent
  */

@@ -3,7 +3,6 @@
 namespace App\Application\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
@@ -13,12 +12,7 @@ use Illuminate\Http\Request;
 class Authenticate extends Middleware
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param Request $request
-     * @param string[] ...$guards
-     *
-     * @throws AuthenticationException
+     * {@inheritDoc}
      */
     public function handle($request, Closure $next, ...$guards): mixed
     {

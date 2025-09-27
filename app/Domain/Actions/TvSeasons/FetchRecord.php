@@ -6,7 +6,7 @@ use App\Domain\DTOs\UpdateTvSeasonData;
 use App\Domain\Models\TvSeason;
 use Closure;
 
-class FetchRecord
+readonly class FetchRecord
 {
     /**
      * Fetch existing tv season record from database or create a new one.

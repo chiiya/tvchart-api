@@ -14,10 +14,10 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
-class FetchShowFromTmdb
+readonly class FetchShowFromTmdb
 {
     public function __construct(
-        private readonly TvShowRepository $tmdb,
+        private TvShowRepository $tmdb,
     ) {}
 
     /**
@@ -26,6 +26,7 @@ class FetchShowFromTmdb
      * @throws RequestException
      * @throws EntityDeletedException
      * @throws ShowIsAdultException
+     * @throws InsufficientDataException
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
@@ -52,10 +53,6 @@ class FetchShowFromTmdb
             throw $exception;
         }
 
-        if ($data->tmdb->name === null) {
-            throw new InsufficientDataException;
-        }
-
         // Skip adult shows
         if ($data->tmdb->adult) {
             if ($data->show->exists) {
@@ -65,7 +62,7 @@ class FetchShowFromTmdb
             throw new ShowIsAdultException;
         }
 
-        $data->imdb_id = $data->tmdb->external_ids->imdb_id;
+        $data->imdb_id = $data->tmdb->external_ids?->imdb_id;
         $data->genres = array_merge($data->genres, $this->getGenres($data->tmdb));
 
         return $next($data);

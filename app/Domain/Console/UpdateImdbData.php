@@ -3,16 +3,16 @@
 namespace App\Domain\Console;
 
 use App\Domain\Clients\ImdbClient;
-use Illuminate\Console\Command;
+use Chiiya\Common\Commands\TimedCommand;
 
-class UpdateImdbData extends Command
+class UpdateImdbData extends TimedCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'tvchart:update:imdb';
+    protected $signature = 'tvchart:update:imdb';
 
     /**
      * The console command description.

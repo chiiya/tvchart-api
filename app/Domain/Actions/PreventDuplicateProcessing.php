@@ -7,14 +7,16 @@ use App\Domain\Exceptions\ImportAlreadyProcessedException;
 use App\Domain\Repositories\ImportLogRepository;
 use Closure;
 
-class PreventDuplicateProcessing
+readonly class PreventDuplicateProcessing
 {
     public function __construct(
-        private readonly ImportLogRepository $imports,
+        private ImportLogRepository $imports,
     ) {}
 
     /**
      * Filter out those files that have already been imported previously.
+     *
+     * @throws ImportAlreadyProcessedException
      */
     public function handle(TmdbExport $data, Closure $next): mixed
     {

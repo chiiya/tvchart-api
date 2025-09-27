@@ -2,15 +2,17 @@
 
 namespace App\Domain\Clients;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
-class OmdbClient
+readonly class OmdbClient
 {
     /**
      * Get show details for the given IMDB id from the OMDB API.
      *
      * @throws RequestException
+     * @throws ConnectionException
      */
     public function getShow(string $imdbId): array
     {

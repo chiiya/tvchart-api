@@ -3,7 +3,6 @@
 namespace App\Domain\Console;
 
 use App\Domain\Clients\TmdbClient;
-use App\Domain\Services\SeasonService;
 use Carbon\CarbonImmutable;
 use Chiiya\Common\Commands\TimedCommand;
 
@@ -26,10 +25,11 @@ class ImportInitialData extends TimedCommand
     /**
      * Execute the console command.
      */
-    public function handle(SeasonService $service, TmdbClient $client): int
+    public function handle(TmdbClient $client): int
     {
-        $service->getSeasonForDate(CarbonImmutable::create(2022, 7));
-        $client->updateShowsSince($service->getCurrentSeason());
+        /** @var CarbonImmutable $start */
+        $start = CarbonImmutable::create(2022, 7);
+        $client->updateShowsSince($start);
 
         $this->comment('All jobs have been dispatched. Make sure your queue worker is running.');
 

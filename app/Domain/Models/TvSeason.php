@@ -23,18 +23,16 @@ use Illuminate\Support\Carbon;
  * @property int|null $release_year
  * @property string $trakt_score
  * @property int|null $tvdb_id
- * @property array|null $locked_fields
+ * @property array<array-key, mixed>|null $locked_fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $season_year
- * @property string|null $season
- * @property Collection|TvEpisode[] $episodes
+ * @property Collection<int, TvEpisode> $episodes
  * @property int|null $episodes_count
  * @property TvShow $show
  *
- * @method static Builder|TvSeason newModelQuery()
- * @method static Builder|TvSeason newQuery()
- * @method static Builder|TvSeason query()
+ * @method static Builder<static>|TvSeason newModelQuery()
+ * @method static Builder<static>|TvSeason newQuery()
+ * @method static Builder<static>|TvSeason query()
  *
  * @mixin \Eloquent
  */
@@ -56,7 +54,7 @@ class TvSeason extends Model
     /**
      * One-To-Many: One TV season belongs to one TV show.
      *
-     * @return BelongsTo<TvShow, TvSeason>
+     * @return BelongsTo<TvShow, $this>
      */
     public function show(): BelongsTo
     {
@@ -66,10 +64,20 @@ class TvSeason extends Model
     /**
      * One-To-Many: One TV season has many TV episodes.
      *
-     * @return HasMany<TvEpisode>
+     * @return HasMany<TvEpisode, $this>
      */
     public function episodes(): HasMany
     {
         return $this->hasMany(TvEpisode::class, 'tv_season_id', 'tmdb_id');
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->first_air_date?->year;
+    }
+
+    public function getMonthName(): ?string
+    {
+        return $this->first_air_date?->format('F');
     }
 }

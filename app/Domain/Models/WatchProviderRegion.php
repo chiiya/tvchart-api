@@ -14,9 +14,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static Builder|WatchProviderRegion newModelQuery()
- * @method static Builder|WatchProviderRegion newQuery()
- * @method static Builder|WatchProviderRegion query()
+ * @method static Builder<static>|WatchProviderRegion newModelQuery()
+ * @method static Builder<static>|WatchProviderRegion newQuery()
+ * @method static Builder<static>|WatchProviderRegion query()
  *
  * @mixin \Eloquent
  */

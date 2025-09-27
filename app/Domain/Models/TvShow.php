@@ -40,26 +40,26 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Status $status
  * @property bool $flagged_for_review
- * @property Carbon|null $status_updated_at
+ * @property CarbonImmutable|null $status_updated_at
  * @property BlacklistReason|null $blacklist_reason
- * @property Collection|Company[] $companies
+ * @property Collection<int, Company> $companies
  * @property int|null $companies_count
- * @property Collection|Country[] $countries
+ * @property Collection<int, Country> $countries
  * @property int|null $countries_count
- * @property Collection|Genre[] $genres
+ * @property Collection<int, Genre> $genres
  * @property int|null $genres_count
- * @property Collection|Language[] $languages
+ * @property Collection<int, Language> $languages
  * @property int|null $languages_count
- * @property Collection|Network[] $networks
+ * @property Collection<int, Network> $networks
  * @property int|null $networks_count
- * @property Collection|TvSeason[] $seasons
+ * @property Collection<int, TvSeason> $seasons
  * @property int|null $seasons_count
- * @property Collection|WatchProvider[] $watchProviders
+ * @property Collection<int, WatchProvider> $watchProviders
  * @property int|null $watch_providers_count
  *
- * @method static Builder|TvShow newModelQuery()
- * @method static Builder|TvShow newQuery()
- * @method static Builder|TvShow query()
+ * @method static Builder<static>|TvShow newModelQuery()
+ * @method static Builder<static>|TvShow newQuery()
+ * @method static Builder<static>|TvShow query()
  *
  * @mixin \Eloquent
  */
@@ -97,7 +97,7 @@ class TvShow extends Model
     /**
      * Many-To-Many: One TV show has many production companies.
      *
-     * @return BelongsToMany<Company>
+     * @return BelongsToMany<Company, $this>
      */
     public function companies(): BelongsToMany
     {
@@ -107,7 +107,7 @@ class TvShow extends Model
     /**
      * Many-To-Many: One TV show has many production/origin countries.
      *
-     * @return BelongsToMany<Country>
+     * @return BelongsToMany<Country, $this>
      */
     public function countries(): BelongsToMany
     {
@@ -117,7 +117,7 @@ class TvShow extends Model
     /**
      * Many-To-Many: One TV show has many spoken/origin languages.
      *
-     * @return BelongsToMany<Language>
+     * @return BelongsToMany<Language, $this>
      */
     public function languages(): BelongsToMany
     {
@@ -127,7 +127,7 @@ class TvShow extends Model
     /**
      * Many-To-Many: One TV show has many genres.
      *
-     * @return BelongsToMany<Genre>
+     * @return BelongsToMany<Genre, $this>
      */
     public function genres(): BelongsToMany
     {
@@ -137,7 +137,7 @@ class TvShow extends Model
     /**
      * Many-To-Many: One TV show has many networks.
      *
-     * @return BelongsToMany<Network>
+     * @return BelongsToMany<Network, $this>
      */
     public function networks(): BelongsToMany
     {
@@ -147,7 +147,7 @@ class TvShow extends Model
     /**
      * Many-To-Many: One TV show has many watch providers, grouped by region.
      *
-     * @return BelongsToMany<WatchProvider>
+     * @return BelongsToMany<WatchProvider, $this>
      */
     public function watchProviders(): BelongsToMany
     {
@@ -162,7 +162,7 @@ class TvShow extends Model
     /**
      * One-To-Many: One TV show has many TV seasons.
      *
-     * @return HasMany<TvSeason>
+     * @return HasMany<TvSeason, $this>
      */
     public function seasons(): HasMany
     {

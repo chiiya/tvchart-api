@@ -2,15 +2,17 @@
 
 namespace App\Domain\Clients;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
-class TraktClient
+readonly class TraktClient
 {
     /**
      * Get extended show information for the given IMDB id from the Trakt API.
      *
      * @throws RequestException
+     * @throws ConnectionException
      */
     public function getShowSummary(string $imdbId): array
     {
@@ -29,6 +31,7 @@ class TraktClient
      * Get show member count for the given IMDB id from the Trakt API.
      *
      * @throws RequestException
+     * @throws ConnectionException
      */
     public function getMemberCount(string $imdbId): int
     {
@@ -47,6 +50,7 @@ class TraktClient
      * Get average season rating for the given IMDB id and season number from the Trakt API.
      *
      * @throws RequestException
+     * @throws ConnectionException
      */
     public function getSeasonRating(string $imdbId, int $number): float
     {
