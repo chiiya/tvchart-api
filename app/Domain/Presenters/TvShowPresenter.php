@@ -5,7 +5,9 @@ namespace App\Domain\Presenters;
 use App\Domain\Models\TvShow;
 use Chiiya\Common\Presenter\Presenter;
 
-/** @extends Presenter<TvShow> */
+/**
+ * @extends Presenter<TvShow>
+ */
 class TvShowPresenter extends Presenter
 {
     public function poster(): string

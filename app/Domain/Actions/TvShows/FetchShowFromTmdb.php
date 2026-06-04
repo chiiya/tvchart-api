@@ -45,7 +45,7 @@ readonly class FetchShowFromTmdb
                     $data->show->delete();
                 }
 
-                throw new EntityDeletedException;
+                throw new EntityDeletedException($exception->getMessage(), $exception->getCode(), $exception);
             }
 
             Log::error('TMDB Exception', ['id' => $data->id, 'exception' => $exception]);

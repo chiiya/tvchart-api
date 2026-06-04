@@ -13,7 +13,6 @@ parameters:
     - '#Parameter\ \#1\ \$title\ of\ static\ method\ Illuminate\\Support\\Str::slug\(\)\ expects\ string,\ bool\|string\ given\.#'
     - '#Parameter\ \#1\ \$callback\ of\ function\ array_map\ expects\ \(callable\(int\|string\):\ mixed\)\|null,\ Closure\(string\):\ mixed\ given\.#'
     - '#Parameter\ \#1\ \$imdbId\ of\ method\ App\\Domain\\Clients\\TraktClient::getMemberCount\(\)\ expects\ string,\ string\|null\ given\.#'
-    - '#Parameter\ \#1\ \$options\ of\ method\ Filament\\Forms\\Components\\Select::options\(\)\ expects\ array<array<string>\|string>\|Closure\|Illuminate\\Contracts\\Support\\Arrayable\|string\|null,\ array<int,\ int>\ given\.#'
     -
       message: '#Access\ to\ an\ undefined\ property\ App\\Domain\\Models\\TvSeason::\$(month|count)\.#'
       paths:
