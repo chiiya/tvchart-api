@@ -10,6 +10,7 @@ use App\Domain\Heuristics\ForeignShow;
 use App\Domain\Heuristics\HeuristicInterface;
 use App\Domain\Heuristics\OldTvShow;
 use App\Domain\Heuristics\PopularShow;
+use App\Domain\Heuristics\StaleShow;
 use Closure;
 
 readonly class UpdateStatus
@@ -28,6 +29,7 @@ readonly class UpdateStatus
             BlacklistedNetwork::class,
             ForeignShow::class,
             PopularShow::class,
+            StaleShow::class,
             OldTvShow::class,
         ];
 

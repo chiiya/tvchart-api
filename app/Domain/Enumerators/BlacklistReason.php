@@ -9,6 +9,7 @@ enum BlacklistReason: string
     case GENRE = 'genre';
     case NETWORK = 'network';
     case OLD = 'old';
+    case NO_TRACTION = 'no_traction';
 
     public static function values(): array
     {
@@ -18,6 +19,7 @@ enum BlacklistReason: string
             BlacklistReason::GENRE->value => __('Blacklisted Genre'),
             BlacklistReason::NETWORK->value => __('Blacklisted Network'),
             BlacklistReason::OLD->value => __('Old Show)'),
+            BlacklistReason::NO_TRACTION->value => __('No Traction'),
         ];
     }
 
