@@ -2,6 +2,7 @@
 
 namespace App\Domain\Models;
 
+use App\Domain\Database\Factories\TvShowFactory;
 use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Presenters\TvShowPresenter;
@@ -9,6 +10,7 @@ use Carbon\CarbonImmutable;
 use Chiiya\Common\Presenter\PresentableTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -60,11 +62,15 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|TvShow newModelQuery()
  * @method static Builder<static>|TvShow newQuery()
  * @method static Builder<static>|TvShow query()
+ * @method static Builder<static>|TvShow pendingReview()
  *
  * @mixin \Eloquent
  */
 class TvShow extends Model
 {
+    /** @use HasFactory<TvShowFactory> */
+    use HasFactory;
+
     /** @use PresentableTrait<TvShowPresenter> */
     use PresentableTrait;
 
@@ -93,6 +99,11 @@ class TvShow extends Model
         'status' => 0,
     ];
     protected string $presenter = TvShowPresenter::class;
+
+    protected static function newFactory(): TvShowFactory
+    {
+        return TvShowFactory::new();
+    }
 
     /**
      * Many-To-Many: One TV show has many production companies.
@@ -167,5 +178,31 @@ class TvShow extends Model
     public function seasons(): HasMany
     {
         return $this->hasMany(TvSeason::class, 'tv_show_id');
+    }
+
+    /**
+     * Scope: Shows pending manual review, ordered by review priority
+     * (upcoming shows first, then by popularity).
+     *
+     * @param Builder<TvShow> $query
+     *
+     * @return Builder<TvShow>
+     */
+    public function scopePendingReview(Builder $query): Builder
+    {
+        return $query
+            ->where(
+                fn (Builder $builder) => $builder
+                    ->where('status', '=', Status::UNREVIEWED)
+                    ->orWhere('flagged_for_review', '=', true),
+            )
+            ->whereNotNull('poster')
+            ->whereNotNull('overview')
+            ->whereNotNull('first_air_date')
+            ->where('first_air_date', '<', now()->addMonths(2))
+            ->orderByRaw('CASE WHEN first_air_date >= ? THEN 0 ELSE 1 END', [now()->toDateString()])
+            ->orderByDesc('trakt_members')
+            ->orderByDesc('imdb_votes')
+            ->orderByDesc('first_air_date');
     }
 }
