@@ -23,7 +23,7 @@ task('php-fpm:reload', function (): void {
 desc('Cache Filament components and Blade icons');
 task('artisan:filament:optimize', artisan('filament:optimize'));
 
-after('artisan:event:cache', 'artisan:filament:optimize');
+after('artisan:optimize', 'artisan:filament:optimize');
 after('deploy:publish', 'php-fpm:reload');
 after('deploy:publish', 'artisan:horizon:terminate');
 after('deploy:failed', 'deploy:unlock');

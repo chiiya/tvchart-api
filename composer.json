@@ -25,7 +25,7 @@
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^3.0",
     "chiiya/laravel-code-style": "^3.2",
-    "deployer/deployer": "^7.5",
+    "deployer/deployer": "^8.0",
     "fakerphp/faker": "^1.23",
     "filament/upgrade": "^5.0",
     "laravel/boost": "^2.4",
