@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9241af8ca695dca19c0e379cd5adbbd",
+    "content-hash": "e8019ce0cd93e2333fa6b4239346b18a",
     "packages": [
         {
             "name": "antwerpes/data-transfer-object",
@@ -6100,80 +6100,6 @@
             "time": "2026-03-17T22:46:46+00:00"
         },
         {
-            "name": "spatie/laravel-query-builder",
-            "version": "6.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-query-builder.git",
-                "reference": "ab9c4c369fc913d6c020a0f6776f3c82f3e523fb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/ab9c4c369fc913d6c020a0f6776f3c82f3e523fb",
-                "reference": "ab9c4c369fc913d6c020a0f6776f3c82f3e523fb",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
-                "php": "^8.2",
-                "spatie/laravel-package-tools": "^1.11"
-            },
-            "require-dev": {
-                "ext-json": "*",
-                "larastan/larastan": "^2.7 || ^3.3",
-                "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^7.0|^8.0|^10.0|^11.0",
-                "pestphp/pest": "^2.0|^3.7|^4.0",
-                "phpunit/phpunit": "^10.0|^11.5.3|^12.0",
-                "spatie/invade": "^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Spatie\\QueryBuilder\\QueryBuilderServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\QueryBuilder\\": "src",
-                    "Spatie\\QueryBuilder\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alex Vanderbist",
-                    "email": "alex@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Easily build Eloquent queries from API requests",
-            "homepage": "https://github.com/spatie/laravel-query-builder",
-            "keywords": [
-                "laravel-query-builder",
-                "spatie"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/laravel-query-builder/issues",
-                "source": "https://github.com/spatie/laravel-query-builder"
-            },
-            "funding": [
-                {
-                    "url": "https://spatie.be/open-source/support-us",
-                    "type": "custom"
-                }
-            ],
-            "time": "2026-03-08T13:45:05+00:00"
-        },
-        {
             "name": "spatie/shiki-php",
             "version": "2.4.0",
             "source": {
@@ -8971,28 +8897,28 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.4.13",
+            "version": "v8.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "a7ec3b1156faf8815db7683ec7c1e7338e6f977c"
+                "reference": "efb42bd2c6f4f3ccfd4683583449938b5fc146b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/a7ec3b1156faf8815db7683ec7c1e7338e6f977c",
-                "reference": "a7ec3b1156faf8815db7683ec7c1e7338e6f977c",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/efb42bd2c6f4f3ccfd4683583449938b5fc146b0",
+                "reference": "efb42bd2c6f4f3ccfd4683583449938b5fc146b0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
-                "symfony/deprecation-contracts": "^2.5|^3",
+                "php": ">=8.4.1",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
-                "symfony/console": "<6.4"
+                "symfony/console": "<7.4"
             },
             "require-dev": {
-                "symfony/console": "^6.4|^7.0|^8.0"
+                "symfony/console": "^7.4|^8.0",
+                "yaml/yaml-test-suite": "*"
             },
             "bin": [
                 "Resources/bin/yaml-lint"
@@ -9023,7 +8949,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.4.13"
+                "source": "https://github.com/symfony/yaml/tree/v8.1.0"
             },
             "funding": [
                 {
@@ -9043,7 +8969,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-25T06:06:12+00:00"
+            "time": "2026-05-29T05:06:50+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -12264,33 +12190,33 @@
         },
         {
             "name": "laravel/tinker",
-            "version": "v2.11.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/tinker.git",
-                "reference": "c9f80cc835649b5c1842898fb043f8cc098dd741"
+                "reference": "4faba77764bd33411735936acdf30446d058c78b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/tinker/zipball/c9f80cc835649b5c1842898fb043f8cc098dd741",
-                "reference": "c9f80cc835649b5c1842898fb043f8cc098dd741",
+                "url": "https://api.github.com/repos/laravel/tinker/zipball/4faba77764bd33411735936acdf30446d058c78b",
+                "reference": "4faba77764bd33411735936acdf30446d058c78b",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-                "php": "^7.2.5|^8.0",
-                "psy/psysh": "^0.11.1|^0.12.0",
-                "symfony/var-dumper": "^4.3.4|^5.0|^6.0|^7.0|^8.0"
+                "illuminate/console": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/contracts": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.1",
+                "psy/psysh": "^0.12.0",
+                "symfony/var-dumper": "^5.4|^6.0|^7.0|^8.0"
             },
             "require-dev": {
                 "mockery/mockery": "~1.3.3|^1.4.2",
                 "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^8.5.8|^9.3.3|^10.0"
+                "phpunit/phpunit": "^10.5|^11.5"
             },
             "suggest": {
-                "illuminate/database": "The Illuminate Database package (^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0)."
+                "illuminate/database": "The Illuminate Database package (^8.0|^9.0|^10.0|^11.0|^12.0|^13.0)."
             },
             "type": "library",
             "extra": {
@@ -12298,6 +12224,9 @@
                     "providers": [
                         "Laravel\\Tinker\\TinkerServiceProvider"
                     ]
+                },
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
                 }
             },
             "autoload": {
@@ -12324,9 +12253,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/tinker/issues",
-                "source": "https://github.com/laravel/tinker/tree/v2.11.1"
+                "source": "https://github.com/laravel/tinker/tree/v3.0.2"
             },
-            "time": "2026-02-06T14:12:35+00:00"
+            "time": "2026-03-17T14:54:13+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -17252,7 +17181,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.3",
+        "php": "^8.4",
         "ext-json": "*",
         "ext-zlib": "*"
     },
