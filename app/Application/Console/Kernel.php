@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateTraktMembers::class)->dailyAt('15:15');
         $schedule->command(FlagShowsForReview::class)->dailyAt('16:00');
         $schedule->command(RequeueUndecidedShows::class)->weekly();
-        $schedule->command(SendReviewDigest::class)->weeklyOn(1, '08:00');
+        $schedule->command(SendReviewDigest::class)->weeklyOn(6, '11:00');
     }
 
     /**
