@@ -10,7 +10,6 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Features\SupportRedirects\Redirector;
 
@@ -68,16 +67,7 @@ class ShowTvShow extends ViewRecord
     public function nextUnreviewedRecord(): Redirector|RedirectResponse|null
     {
         $record = TvShow::query()
-            ->where(
-                fn (Builder $builder) => $builder
-                    ->where('status', '=', Status::UNREVIEWED)
-                    ->orWhere('flagged_for_review', '=', true),
-            )
-            ->whereNotNull('poster')
-            ->whereNotNull('overview')
-            ->whereNotNull('first_air_date')
-            ->where('first_air_date', '<', now()->addMonths(2))
-            ->orderByDesc('first_air_date')
+            ->pendingReview()
             ->select(['tmdb_id'])
             ->first();
 
@@ -97,15 +87,18 @@ class ShowTvShow extends ViewRecord
                 ->action('undecided')
                 ->color('warning')
                 ->icon('heroicon-m-question-mark-circle')
+                ->keyBindings(['u'])
                 ->label(__('Undecided')),
             Action::make('whitelist')
                 ->action('whitelist')
                 ->color('success')
                 ->icon('heroicon-m-check-circle')
+                ->keyBindings(['w'])
                 ->label(__('Whitelist')),
             ActionGroup::make([
                 Action::make('blacklistUnavailable')
                     ->label(BlacklistReason::UNAVAILABLE->present())
+                    ->keyBindings(['b'])
                     ->action(fn () => $this->blacklist(BlacklistReason::UNAVAILABLE)),
                 Action::make('blacklistInappropriate')
                     ->label(BlacklistReason::INAPPROPRIATE->present())
@@ -131,6 +124,7 @@ class ShowTvShow extends ViewRecord
                 ->label(__('Blacklist (Final)')),
             Action::make('next')
                 ->action('nextUnreviewedRecord')
+                ->keyBindings(['n'])
                 ->label(__('Review Next')),
         ];
     }
