@@ -15,6 +15,7 @@
     "guzzlehttp/guzzle": "^7.8",
     "laravel/framework": "^13.0",
     "laravel/horizon": "^5.24",
+    "lettermint/lettermint-laravel": "^2.1",
     "nwidart/laravel-modules": "^13.0",
     "sentry/sentry-laravel": "^4.5",
     "sokil/php-isocodes": "^4.2",
