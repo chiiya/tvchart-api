@@ -27,7 +27,10 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     {
         Gate::define(
             'viewHorizon',
-            function () {
+            // The unused, nullable $user parameter is load-bearing: Horizon resolves the
+            // user from the default (web) guard, which is always null here. Without a
+            // nullable first parameter, the Gate denies guests before invoking the callback.
+            function (?FilamentUser $user = null) {
                 if (! Auth::guard('filament')->check()) {
                     return false;
                 }
