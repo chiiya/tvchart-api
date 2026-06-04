@@ -188,6 +188,37 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Stale Shows
+    |--------------------------------------------------------------------------
+    |
+    | Shows that aired a while ago without ever gaining traction on IMDB or
+    | Trakt are automatically blacklisted. The daily `tvchart:flag` command
+    | acts as a safety net by re-flagging blacklisted shows that become
+    | popular later on.
+    |
+    */
+    'stale' => [
+        'aired_before_months' => 12,
+        'max_imdb_votes' => 1000,
+        'max_trakt_members' => 1000,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Review Digest
+    |--------------------------------------------------------------------------
+    |
+    | Weekly email digest about shows pending manual review. When no
+    | recipients are configured, all Filament users receive the digest.
+    |
+    */
+    'digest' => [
+        'recipients' => array_filter(explode(',', (string) env('DIGEST_RECIPIENTS', ''))),
+        'limit' => 15,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | International Networks
     |--------------------------------------------------------------------------
     |
