@@ -5,6 +5,7 @@ namespace App\Application\Console;
 use App\Domain\Console\FlagShowsForReview;
 use App\Domain\Console\ImportChanges;
 use App\Domain\Console\RequeueUndecidedShows;
+use App\Domain\Console\SendReviewDigest;
 use App\Domain\Console\UpdateCompanies;
 use App\Domain\Console\UpdateCountries;
 use App\Domain\Console\UpdateImdbData;
@@ -41,6 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateTraktMembers::class)->dailyAt('15:15');
         $schedule->command(FlagShowsForReview::class)->dailyAt('16:00');
         $schedule->command(RequeueUndecidedShows::class)->weekly();
+        $schedule->command(SendReviewDigest::class)->weeklyOn(1, '08:00');
     }
 
     /**
