@@ -2,12 +2,9 @@
 
 namespace App\Application\Providers;
 
-use App\Filament\Resources\TvShowResource\Widgets\StatusOverview;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\TelescopeServiceProvider as LaravelTelescopeServiceProvider;
-use Livewire\Livewire;
-use Livewire\Mechanisms\ComponentRegistry;
 
 class ApplicationServiceProvider extends ServiceProvider
 {
@@ -20,13 +17,6 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-        }
-
-        $widgets = [StatusOverview::class];
-
-        foreach ($widgets as $widget) {
-            $componentName = app(ComponentRegistry::class)->getName($widget);
-            Livewire::component($componentName, $widget);
         }
     }
 
