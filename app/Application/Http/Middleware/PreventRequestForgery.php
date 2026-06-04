@@ -2,9 +2,9 @@
 
 namespace App\Application\Http\Middleware;
 
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery as Middleware;
 
-class VerifyCsrfToken extends Middleware
+class PreventRequestForgery extends Middleware
 {
     /** {@inheritDoc} */
     protected $except = [];

@@ -4,11 +4,11 @@ namespace App\Application\Http;
 
 use App\Application\Http\Middleware\Authenticate;
 use App\Application\Http\Middleware\EncryptCookies;
+use App\Application\Http\Middleware\PreventRequestForgery;
 use App\Application\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Application\Http\Middleware\RedirectIfAuthenticated;
 use App\Application\Http\Middleware\TrimStrings;
 use App\Application\Http\Middleware\TrustProxies;
-use App\Application\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -55,7 +55,7 @@ class Kernel extends HttpKernel
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             ShareErrorsFromSession::class,
-            VerifyCsrfToken::class,
+            PreventRequestForgery::class,
             SubstituteBindings::class,
         ],
 
