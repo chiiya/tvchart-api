@@ -32,7 +32,7 @@ readonly class FetchSeasonFromTmdb
             if ($exception->response->status() === 404) {
                 $data->season->delete();
 
-                throw new EntityDeletedException;
+                throw new EntityDeletedException($exception->getMessage(), $exception->getCode(), $exception);
             }
 
             throw $exception;

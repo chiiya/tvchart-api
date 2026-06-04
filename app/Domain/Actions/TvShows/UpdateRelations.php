@@ -64,7 +64,7 @@ readonly class UpdateRelations
      */
     private function getProviderIds(WatchProviderList $list): Collection
     {
-        return collect(array_merge($list->flatrate ?? [], $list->rent ?? [], $list->buy ?? []))
+        return collect(array_merge($list->flatrate, $list->rent, $list->buy))
             ->pluck('provider_id')
             ->unique();
     }

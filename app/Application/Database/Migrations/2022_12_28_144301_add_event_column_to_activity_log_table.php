@@ -7,21 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::connection(config('activitylog.database_connection'))->table(
-            config('activitylog.table_name'),
-            function (Blueprint $table): void {
-                $table->string('event')->nullable()->after('subject_type');
-            },
-        );
+        Schema::table('activity_log', function (Blueprint $table): void {
+            $table->string('event')->nullable()->after('subject_type');
+        });
     }
 
     public function down(): void
     {
-        Schema::connection(config('activitylog.database_connection'))->table(
-            config('activitylog.table_name'),
-            function (Blueprint $table): void {
-                $table->dropColumn('event');
-            },
-        );
+        Schema::table('activity_log', function (Blueprint $table): void {
+            $table->dropColumn('event');
+        });
     }
 };

@@ -12,6 +12,7 @@ use App\Domain\Models\WatchProvider;
 use App\Filament\Resources\TvShowResource\Pages\ListTvShows;
 use App\Filament\Resources\TvShowResource\Pages\ShowTvShow;
 use App\Filament\Resources\TvShowResource\RelationManagers\TvSeasonsRelationManager;
+use App\Filament\Resources\TvShowResource\Widgets\StatusOverview;
 use BackedEnum;
 use Carbon\CarbonImmutable;
 use Filament\Actions\ViewAction;
@@ -91,7 +92,11 @@ class TvShowResource extends Resource
                                     ->required(),
                                 Select::make('year')
                                     ->label(__('Year'))
-                                    ->options(array_combine(range(now()->year, 2020), range(now()->year, 2020)))
+                                    ->options(
+                                        collect(range(now()->year, 2020))
+                                            ->mapWithKeys(fn (int $year): array => [$year => (string) $year])
+                                            ->all(),
+                                    )
                                     ->required(),
                             ]),
                     ])
@@ -305,6 +310,11 @@ class TvShowResource extends Resource
             'index' => ListTvShows::route('/'),
             'view' => ShowTvShow::route('/{record}/show'),
         ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [StatusOverview::class];
     }
 
     public static function getModelLabel(): string
