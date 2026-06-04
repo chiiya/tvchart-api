@@ -19,7 +19,7 @@
     "sentry/sentry-laravel": "^4.5",
     "sokil/php-isocodes": "^4.2",
     "sokil/php-isocodes-db-only": "^4.0",
-    "spatie/laravel-activitylog": "^4.8",
+    "spatie/laravel-activitylog": "^5.0",
     "symfony/yaml": "^8.0"
   },
   "require-dev": {
