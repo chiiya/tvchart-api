@@ -2,17 +2,20 @@
 
 namespace App\Domain\Heuristics;
 
+use App\Domain\Actions\TvShows\UpdateStatus;
 use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvShow;
-use Carbon\CarbonImmutable;
 
 class ForeignShow implements HeuristicInterface
 {
     use ChecksAvailability;
 
     /**
-     * Blacklist a foreign show if it's only available regionally.
+     * Blacklist a foreign show if it's only available regionally. If it becomes
+     * available internationally later, it is flagged for review again.
+     *
+     * @see UpdateStatus
      */
     public function apply(TvShow $show): ?Status
     {
@@ -24,19 +27,6 @@ class ForeignShow implements HeuristicInterface
         }
 
         if ($this->isAvailableInternationally($show)) {
-            return null;
-        }
-
-        if (in_array(
-            $show->primary_language,
-            config('tv-chart.blacklist.languages'),
-            true,
-        ) && ! $this->belongsToInternationallyAvailableNetwork($show)) {
-            return Status::BLACKLISTED;
-        }
-
-        // Recently aired, too early to decide automatically
-        if (! $show->first_air_date instanceof CarbonImmutable || $show->first_air_date->gte(now()->subMonths(12))) {
             return null;
         }
 

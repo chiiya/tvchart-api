@@ -2,6 +2,7 @@
 
 namespace App\Application\Console;
 
+use App\Domain\Console\EvaluateShows;
 use App\Domain\Console\FlagShowsForReview;
 use App\Domain\Console\ImportChanges;
 use App\Domain\Console\RequeueUndecidedShows;
@@ -42,6 +43,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateTraktMembers::class)->dailyAt('15:15');
         $schedule->command(FlagShowsForReview::class)->dailyAt('16:00');
         $schedule->command(RequeueUndecidedShows::class)->weekly();
+        $schedule->command(EvaluateShows::class)->weekly();
         $schedule->command(SendReviewDigest::class)->weeklyOn(6, '11:00');
     }
 
