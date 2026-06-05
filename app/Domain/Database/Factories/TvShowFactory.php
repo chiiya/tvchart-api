@@ -36,6 +36,16 @@ class TvShowFactory extends Factory
     }
 
     /**
+     * Non-english show from a non-whitelisted country.
+     */
+    public function foreign(): self
+    {
+        return $this->state(fn () => [
+            'primary_language' => 'de',
+        ]);
+    }
+
+    /**
      * Aired a while ago without ever gaining traction.
      */
     public function stale(): self

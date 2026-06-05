@@ -2,7 +2,9 @@
 
 namespace App\Domain\Models;
 
+use App\Domain\Database\Factories\CountryFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -20,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Country extends Model
 {
+    /** @use HasFactory<CountryFactory> */
+    use HasFactory;
+
     /** {@inheritDoc} */
     public $incrementing = false;
 
@@ -34,6 +39,11 @@ class Country extends Model
 
     /** {@inheritDoc} */
     protected $guarded = [];
+
+    protected static function newFactory(): CountryFactory
+    {
+        return CountryFactory::new();
+    }
 
     /**
      * Is the country whitelisted?

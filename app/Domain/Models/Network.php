@@ -2,7 +2,9 @@
 
 namespace App\Domain\Models;
 
+use App\Domain\Database\Factories\NetworkFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -24,6 +26,9 @@ use Illuminate\Support\Carbon;
  */
 class Network extends Model
 {
+    /** @use HasFactory<NetworkFactory> */
+    use HasFactory;
+
     /** {@inheritDoc} */
     public $incrementing = false;
 
@@ -32,6 +37,11 @@ class Network extends Model
 
     /** {@inheritDoc} */
     protected $guarded = ['created_at', 'updated_at'];
+
+    protected static function newFactory(): NetworkFactory
+    {
+        return NetworkFactory::new();
+    }
 
     /**
      * Is the network whitelisted?
