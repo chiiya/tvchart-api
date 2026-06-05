@@ -3,51 +3,47 @@
 namespace App\Domain\Actions\TvShows;
 
 use App\Domain\DTOs\UpdateTvShowData;
+use App\Domain\Enumerators\BlacklistReason;
 use App\Domain\Enumerators\Status;
-use App\Domain\Heuristics\BlacklistedGenre;
-use App\Domain\Heuristics\BlacklistedNetwork;
-use App\Domain\Heuristics\ForeignShow;
-use App\Domain\Heuristics\HeuristicInterface;
-use App\Domain\Heuristics\OldTvShow;
-use App\Domain\Heuristics\PopularShow;
-use App\Domain\Heuristics\StaleShow;
+use App\Domain\Heuristics\ChecksAvailability;
+use App\Domain\Models\TvShow;
+use App\Domain\Services\EvaluateHeuristics;
 use Closure;
 
 readonly class UpdateStatus
 {
+    use ChecksAvailability;
+
+    public function __construct(
+        private EvaluateHeuristics $heuristics,
+    ) {}
+
     /**
-     * Update our tv show record in database.
+     * Update the status of our tv show record in database.
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
-        if ($data->show->status !== Status::UNREVIEWED) {
-            return $next($data);
-        }
+        $show = $data->show;
 
-        $heuristics = [
-            BlacklistedGenre::class,
-            BlacklistedNetwork::class,
-            ForeignShow::class,
-            PopularShow::class,
-            StaleShow::class,
-            OldTvShow::class,
-        ];
-
-        foreach ($heuristics as $heuristicClass) {
-            /** @var HeuristicInterface $heuristic */
-            $heuristic = resolve($heuristicClass);
-            $status = $heuristic->apply($data->show);
-
-            if ($status instanceof Status) {
-                $data->show->update([
-                    'status' => $status,
-                    'blacklist_reason' => $heuristic->reason(),
-                    'status_updated_at' => now(),
-                ]);
-                break;
-            }
+        if ($show->status === Status::UNREVIEWED) {
+            $this->heuristics->evaluate($show);
+        } elseif ($this->shouldFlagForReview($show)) {
+            $show->update(['flagged_for_review' => true]);
+            activity()->on($show)->log('Flagged for review: became internationally available.');
         }
 
         return $next($data);
+    }
+
+    /**
+     * A show previously blacklisted as unavailable has become available
+     * internationally and should be reviewed again.
+     */
+    private function shouldFlagForReview(TvShow $show): bool
+    {
+        return $show->status === Status::BLACKLISTED
+            && $show->blacklist_reason === BlacklistReason::UNAVAILABLE
+            && ! $show->flagged_for_review
+            && $this->isAvailableInternationally($show);
     }
 }
