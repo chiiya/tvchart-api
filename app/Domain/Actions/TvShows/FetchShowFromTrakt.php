@@ -43,6 +43,7 @@ readonly class FetchShowFromTrakt
 
         $data->trakt = [
             'trakt_members' => $members,
+            'trakt_synced_at' => now(),
             'runtime' => $show['runtime'],
         ];
 

@@ -38,6 +38,7 @@ use Illuminate\Support\Carbon;
  * @property int $trakt_members
  * @property string|null $imdb_id
  * @property int|null $tvdb_id
+ * @property CarbonImmutable|null $trakt_synced_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Status $status
@@ -87,6 +88,7 @@ class TvShow extends Model
     protected $casts = [
         'first_air_date' => 'immutable_date',
         'status_updated_at' => 'immutable_date',
+        'trakt_synced_at' => 'immutable_datetime',
         'imdb_score' => 'float',
         'status' => Status::class,
         'flagged_for_review' => 'boolean',
