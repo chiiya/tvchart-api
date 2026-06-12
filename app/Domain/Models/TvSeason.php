@@ -2,9 +2,11 @@
 
 namespace App\Domain\Models;
 
+use App\Domain\Database\Factories\TvSeasonFactory;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,6 +40,9 @@ use Illuminate\Support\Carbon;
  */
 class TvSeason extends Model
 {
+    /** @use HasFactory<TvSeasonFactory> */
+    use HasFactory;
+
     /** {@inheritDoc} */
     public $incrementing = false;
 
@@ -50,6 +55,11 @@ class TvSeason extends Model
         'first_air_date' => 'immutable_date',
         'locked_fields' => 'array',
     ];
+
+    protected static function newFactory(): TvSeasonFactory
+    {
+        return TvSeasonFactory::new();
+    }
 
     /**
      * One-To-Many: One TV season belongs to one TV show.

@@ -19,10 +19,12 @@ class SendReviewDigestTest extends TestCase
         config([
             'tv-chart.digest.recipients' => ['admin@example.com'],
         ]);
-        $upcoming = TvShow::factory()->pendingReview()->create();
-        $aired = TvShow::factory()->pendingReview()->popular()->create([
-            'first_air_date' => now()->subMonth(),
-        ]);
+        $upcoming = TvShow::factory()->pendingReview()
+            ->withSeason(now()->addWeeks(2))
+            ->create();
+        $aired = TvShow::factory()->pendingReview()->popular()
+            ->withSeason(now()->subMonth())
+            ->create();
 
         $exitCode = Artisan::call('tvchart:digest');
 
