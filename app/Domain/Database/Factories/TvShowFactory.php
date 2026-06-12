@@ -3,7 +3,9 @@
 namespace App\Domain\Database\Factories;
 
 use App\Domain\Enumerators\Status;
+use App\Domain\Models\TvSeason;
 use App\Domain\Models\TvShow;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -78,5 +80,19 @@ class TvShowFactory extends Factory
             'imdb_votes' => 50_000,
             'trakt_members' => 50_000,
         ]);
+    }
+
+    /**
+     * Attach a season with the given air date, which drives review priority.
+     */
+    public function withSeason(DateTimeInterface $airDate, int $number = 1): self
+    {
+        return $this->afterCreating(function (TvShow $show) use ($airDate, $number): void {
+            TvSeason::factory()->create([
+                'tv_show_id' => $show->tmdb_id,
+                'number' => $number,
+                'first_air_date' => $airDate,
+            ]);
+        });
     }
 }

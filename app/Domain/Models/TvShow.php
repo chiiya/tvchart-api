@@ -183,8 +183,18 @@ class TvShow extends Model
     }
 
     /**
-     * Scope: Shows pending manual review, ordered by review priority
-     * (upcoming shows first, then by popularity).
+     * Scope: Shows pending manual review, ordered by review priority:
+     * flagged shows first, then by how close the show's latest season air
+     * date is to today (so currently-airing and soon-airing shows surface
+     * before older ones), with popularity as a tiebreaker.
+     *
+     * Review priority is based on the latest season's air date, not the
+     * show's premiere date: a long-running show that premiered years ago but
+     * has a new season airing now is highly relevant, while a show whose last
+     * season aired before the archive start is never displayed and is
+     * excluded. Seasons airing further out than the horizon are ignored so
+     * that a returning show is judged by its nearest relevant season rather
+     * than a far-off announced one.
      *
      * @param Builder<TvShow> $query
      *
@@ -192,19 +202,36 @@ class TvShow extends Model
      */
     public function scopePendingReview(Builder $query): Builder
     {
+        $today = now()->toDateString();
+        $horizon = now()->addMonths(2)->toDateString();
+
+        $latestSeason = TvSeason::query()
+            ->selectRaw('tv_show_id, MAX(first_air_date) AS last_air_date')
+            ->where('number', '>', 0)
+            ->whereNotNull('first_air_date')
+            ->where('first_air_date', '<', $horizon)
+            ->groupBy('tv_show_id');
+
+        // Day distance between the latest season air date and today. Postgres
+        // subtracts dates directly; SQLite (used in tests) needs julianday().
+        $proximity = $this->getConnection()->getDriverName() === 'sqlite'
+            ? 'ABS(julianday(latest_season.last_air_date) - julianday(?))'
+            : 'ABS(latest_season.last_air_date - ?::date)';
+
         return $query
+            ->select('tv_shows.*')
+            ->joinSub($latestSeason, 'latest_season', 'latest_season.tv_show_id', '=', 'tv_shows.tmdb_id')
             ->where(
                 fn (Builder $builder) => $builder
-                    ->where('status', '=', Status::UNREVIEWED)
-                    ->orWhere('flagged_for_review', '=', true),
+                    ->where('tv_shows.status', '=', Status::UNREVIEWED)
+                    ->orWhere('tv_shows.flagged_for_review', '=', true),
             )
-            ->whereNotNull('poster')
-            ->whereNotNull('overview')
-            ->whereNotNull('first_air_date')
-            ->where('first_air_date', '<', now()->addMonths(2))
-            ->orderByRaw('CASE WHEN first_air_date >= ? THEN 0 ELSE 1 END', [now()->toDateString()])
-            ->orderByDesc('trakt_members')
-            ->orderByDesc('imdb_votes')
-            ->orderByDesc('first_air_date');
+            ->whereNotNull('tv_shows.poster')
+            ->whereNotNull('tv_shows.overview')
+            ->where('latest_season.last_air_date', '>=', config('tv-chart.archive_start'))
+            ->orderByDesc('tv_shows.flagged_for_review')
+            ->orderByRaw($proximity, [$today])
+            ->orderByDesc('tv_shows.trakt_members')
+            ->orderByDesc('tv_shows.imdb_votes');
     }
 }
