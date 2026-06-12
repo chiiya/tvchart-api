@@ -6,6 +6,7 @@ use App\Domain\Enumerators\Status;
 use App\Domain\Models\TvSeason;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Support\Collection;
 use Sokil\IsoCodes\IsoCodesFactory;
 
 readonly class TvSeasonService
@@ -91,11 +92,15 @@ readonly class TvSeasonService
                 ->orderByDesc('month')
                 ->get();
 
-            return $shows->map(fn ($show) => [
-                'year' => (int) mb_substr($show->month, 0, 4),
-                'month' => (int) mb_substr($show->month, 5, 2),
-                'shows' => (int) $show->count,
-            ])->groupBy('year')->all();
+            return $shows
+                ->map(fn ($show) => [
+                    'year' => (int) mb_substr($show->month, 0, 4),
+                    'month' => (int) mb_substr($show->month, 5, 2),
+                    'shows' => (int) $show->count,
+                ])
+                ->groupBy('year')
+                ->map(fn (Collection $months) => $months->values()->all())
+                ->all();
         });
     }
 }

@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use App\V1\Http\Controllers\FacetController;
 use App\V1\Http\Controllers\SeasonController;
 use App\V1\Http\Controllers\StatsController;
 
@@ -21,3 +22,6 @@ Route::get('/shows/{year}/{month}', [SeasonController::class, 'index'])
 
 Route::get('/stats/monthly', [StatsController::class, 'monthly'])
     ->name('stats.monthly');
+
+Route::get('/facets', [FacetController::class, 'index'])
+    ->name('facets.index');

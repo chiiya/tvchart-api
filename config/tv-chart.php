@@ -119,6 +119,33 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Facets
+    |--------------------------------------------------------------------------
+    |
+    | Curated filter vocabularies for the frontend. The full set of networks in
+    | the database is too long to be useful as a filter, so we expose only the
+    | major streaming services and the top US cable networks, in priority order.
+    | Names must match the network names as stored in the database.
+    |
+    */
+    'facets' => [
+        'networks' => [
+            'Netflix',
+            'Prime Video',
+            'Apple TV',
+            'Disney+',
+            'Hulu',
+            'Max',
+            'Paramount+',
+            'Peacock',
+            'HBO',
+            'Showtime',
+            'FX',
+        ],
+    ],
+
     'tmdb' => [
         'exports' => 'https://files.tmdb.org/p/exports/',
     ],
