@@ -229,7 +229,6 @@ class TvShow extends Model
             ->whereNotNull('tv_shows.poster')
             ->whereNotNull('tv_shows.overview')
             ->where('latest_season.last_air_date', '>=', config('tv-chart.archive_start'))
-            ->orderByDesc('tv_shows.flagged_for_review')
             ->orderByRaw($proximity, [$today])
             ->orderByDesc('tv_shows.trakt_members')
             ->orderByDesc('tv_shows.imdb_votes');
