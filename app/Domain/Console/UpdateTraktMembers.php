@@ -32,6 +32,12 @@ class UpdateTraktMembers extends Command
      */
     public function handle(TraktClient $client): int
     {
+        if (! config('tv-chart.trakt.enabled')) {
+            $this->comment('Trakt integration is disabled, skipping.');
+
+            return self::SUCCESS;
+        }
+
         $shows = TvShow::query()
             ->whereNotNull('imdb_id')
             ->where('status', '!=', Status::BLACKLISTED_FINAL)

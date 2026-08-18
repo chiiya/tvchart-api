@@ -19,8 +19,8 @@ readonly class FetchShowFromOmdb
     /**
      * Fetch TV show data from OMDB.
      *
-     * @throws RequestException
-     * @throws ConnectionException
+     * OMDB only enriches TMDB data, so any failure here is logged and skipped
+     * rather than thrown - it must never block persisting the show.
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
@@ -31,16 +31,21 @@ readonly class FetchShowFromOmdb
         try {
             $response = $this->client->getShow($data->imdb_id);
         } catch (RequestException $exception) {
-            if ($exception->response->status() === 404) {
-                return $next($data);
+            if ($exception->response->status() !== 404) {
+                Log::error('OMDB Exception', [
+                    'id' => $data->id,
+                    'exception' => $exception,
+                ]);
             }
 
-            Log::error('OMDB Exception', [
+            return $next($data);
+        } catch (ConnectionException $exception) {
+            Log::error('OMDB connection failure', [
                 'id' => $data->id,
                 'exception' => $exception,
             ]);
 
-            throw $exception;
+            return $next($data);
         }
 
         $data->omdb = Arr::only($response, ['summary']);

@@ -95,9 +95,25 @@ class UpdateTraktMembersTest extends TestCase
         $this->assertNull($show->refresh()->trakt_synced_at);
     }
 
+    public function test_does_nothing_when_trakt_is_disabled(): void
+    {
+        config()->set('tv-chart.trakt.enabled', false);
+        Http::fake();
+        $show = TvShow::factory()->create([
+            'imdb_id' => 'tt0000001',
+        ]);
+
+        $exitCode = Artisan::call('tvchart:update:trakt');
+
+        $this->assertSame(0, $exitCode);
+        $this->assertNull($show->refresh()->trakt_synced_at);
+        Http::assertNothingSent();
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
         Sleep::fake();
+        config()->set('tv-chart.trakt.enabled', true);
     }
 }

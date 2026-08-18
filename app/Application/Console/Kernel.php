@@ -12,7 +12,6 @@ use App\Domain\Console\UpdateCountries;
 use App\Domain\Console\UpdateImdbData;
 use App\Domain\Console\UpdateLanguages;
 use App\Domain\Console\UpdateNetworks;
-use App\Domain\Console\UpdateTraktMembers;
 use App\Domain\Console\UpdateWatchProviders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -40,7 +39,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateNetworks::class)->dailyAt('09:00');
         $schedule->command(ImportChanges::class)->dailyAt('09:15');
         $schedule->command(UpdateImdbData::class)->dailyAt('15:00');
-        $schedule->command(UpdateTraktMembers::class)->dailyAt('15:15');
         $schedule->command(FlagShowsForReview::class)->dailyAt('16:00');
         $schedule->command(RequeueUndecidedShows::class)->weekly();
         $schedule->command(EvaluateShows::class)->weekly();

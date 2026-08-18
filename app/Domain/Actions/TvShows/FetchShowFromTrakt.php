@@ -5,6 +5,7 @@ namespace App\Domain\Actions\TvShows;
 use App\Domain\Clients\TraktClient;
 use App\Domain\DTOs\UpdateTvShowData;
 use Closure;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Log;
 
@@ -17,11 +18,12 @@ readonly class FetchShowFromTrakt
     /**
      * Fetch TV show data from Trakt.
      *
-     * @throws RequestException
+     * Trakt only enriches TMDB data, so any failure here is logged and skipped
+     * rather than thrown - it must never block persisting the show.
      */
     public function handle(UpdateTvShowData $data, Closure $next): mixed
     {
-        if ($data->imdb_id === null) {
+        if (! config('tv-chart.trakt.enabled') || $data->imdb_id === null) {
             return $next($data);
         }
 
@@ -29,16 +31,21 @@ readonly class FetchShowFromTrakt
             $members = $this->client->getMemberCount($data->imdb_id);
             $show = $this->client->getShowSummary($data->imdb_id);
         } catch (RequestException $exception) {
-            if ($exception->response->status() === 404) {
-                return $next($data);
+            if ($exception->response->status() !== 404) {
+                Log::error('Trakt Exception', [
+                    'id' => $data->id,
+                    'exception' => $exception,
+                ]);
             }
 
-            Log::error('Trakt Exception', [
+            return $next($data);
+        } catch (ConnectionException $exception) {
+            Log::error('Trakt connection failure', [
                 'id' => $data->id,
                 'exception' => $exception,
             ]);
 
-            throw $exception;
+            return $next($data);
         }
 
         $data->trakt = [
