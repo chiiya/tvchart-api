@@ -3,6 +3,8 @@
 namespace App\Domain\Database\Factories;
 
 use App\Domain\Enumerators\Status;
+use App\Domain\Models\Genre;
+use App\Domain\Models\Network;
 use App\Domain\Models\TvSeason;
 use App\Domain\Models\TvShow;
 use DateTimeInterface;
@@ -68,7 +70,11 @@ class TvShowFactory extends Factory
             'status' => Status::UNREVIEWED,
             'flagged_for_review' => false,
             'first_air_date' => now()->addWeeks(2),
-        ]);
+        ])->afterCreating(function (TvShow $show): void {
+            // The review-queue scope requires at least one genre and network.
+            $show->genres()->attach(Genre::factory()->create());
+            $show->networks()->attach(Network::factory()->create());
+        });
     }
 
     /**

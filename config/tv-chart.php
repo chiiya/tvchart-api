@@ -155,6 +155,8 @@ return [
     ],
 
     'trakt' => [
+        // Trakt discontinued their free API tier. Enabling this again requires a paid key.
+        'enabled' => env('TRAKT_ENABLED', false),
         'key' => env('TRAKT_API_TOKEN'),
     ],
 

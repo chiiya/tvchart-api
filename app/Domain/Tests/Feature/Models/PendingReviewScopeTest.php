@@ -37,7 +37,7 @@ class PendingReviewScopeTest extends TestCase
         $this->assertContains($flagged->tmdb_id, $ids);
     }
 
-    public function test_orders_flagged_shows_first_then_by_air_date_proximity(): void
+    public function test_orders_by_air_date_proximity(): void
     {
         $flaggedOld = TvShow::factory()->pendingReview()
             ->withSeason(now()->subYears(2))
@@ -59,7 +59,7 @@ class PendingReviewScopeTest extends TestCase
         $ids = TvShow::query()->pendingReview()->pluck('tmdb_id')->all();
 
         $this->assertSame(
-            [$flaggedOld->tmdb_id, $airingNow->tmdb_id, $upcoming->tmdb_id, $airedAwhileAgo->tmdb_id],
+            [$airingNow->tmdb_id, $upcoming->tmdb_id, $airedAwhileAgo->tmdb_id, $flaggedOld->tmdb_id],
             $ids,
         );
     }

@@ -12,10 +12,13 @@ class PopularShow implements HeuristicInterface
     /**
      * Whitelist a show when it's popular, in English language and from a high
      * quality network.
+     *
+     * Popularity rests on IMDB votes alone since Trakt member counts are no
+     * longer being fetched, so requiring them would never whitelist anything.
      */
     public function apply(TvShow $show): ?Status
     {
-        if ($show->imdb_votes < 10000 || $show->trakt_members < 10000) {
+        if ($show->imdb_votes < 10000) {
             return null;
         }
 
